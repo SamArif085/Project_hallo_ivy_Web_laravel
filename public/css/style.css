@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@media screen and (min-width:992px) {
+    .body{
+        background-color: #EBE9E9;
+        font-family: Poppins;
+    }
+    .navbar .container-fluid, .navbar-expand-lg .navbar-collapse, .navbar-expand-lg .navbar-nav{
+        flex-direction: column;
+    }
+    .navbar{
+        width: 27vmin;
+        height: 100vh;
+        box-shadow: 2px 4px 16px rgba(0,0,0,0.25);
+    }
+    #navbar-brand{
+        color: #66E682;
+        font-size: 36px;
+    }
+    #nama-pengguna{
+        font-size: 14px;
+    }
+    #email-pengguna{
+        font-size: 12px;
+        color: #6e6b6a;
+    }
+    #judul{
+        font-size: 36px;
+        text-decoration: underline;
+        color: #656565;
+        margin-top: 30px;
+        margin-left: 50px;
+    }
+    #content{
+        width: -webkit-fill-available;
+    }
+    .search-btn{
+        padding: 10px;
+        width: -webkit-fill-available;
+        background-color: white;
+    }
+    .tabel{
+        margin-top: 30px;
+        margin-left: 50px;
+        margin-right: 50px;
+        box-shadow: 0px 4px 11px -3px rgba(0,0,0,0.25);
+    }
+    #btn-utama{
+        background-color: #66E682;
+    }
+    #btn-utama:hover{
+        color: white;
+    }
+}
+@media (max-width: 991.98px) {
+    .body{
+        background-color: #EBE9E9;
+        font-family: Poppins;
+    }
+    #navbar-brand{
+        color: #66E682;
+        font-size: 36px;
+    }
+    #nama-pengguna{
+        font-size: 14px;
+    }
+    #email-pengguna{
+        font-size: 12px;
+        color: #6e6b6a;
+    }
+    .content{
+        flex-direction: column;
+    }
+
+    #judul{
+        font-size: 36px;
+        text-decoration: underline;
+        color: #656565;
+        margin-top: 30px;
+        margin-left: 50px;
+    }
+    #content{
+        width: -webkit-fill-available;
+    }
+    .search-btn{
+        padding: 10px;
+        width: -webkit-fill-available;
+        background-color: white;
+    }
+    .tabel{
+        margin-top: 30px;
+        margin-left: 50px;
+        margin-right: 50px;
+        box-shadow: 0px 4px 11px -3px rgba(0,0,0,0.25);
+    }
+    #btn-utama{
+        background-color: #66E682;
+    }
+    #btn-utama:hover{
+        color: white;
+    }
+    .nav-link{
+        margin-left: 10px;
+    }
+
+}
+
