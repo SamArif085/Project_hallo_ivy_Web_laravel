@@ -20,4 +20,13 @@ class MateriController extends Controller
         ];
         return view('content/materi', $data);
     }
+
+    public function createData(Request $request)
+    {
+        $validator = validator([
+            'pilKelas' => 'required',
+        ]);
+
+        return redirect()->back()->with('mesagge', 'Data Kosong');
+    }
 }

@@ -26,3 +26,5 @@ Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
 Route::get('materi', [MateriController::class, 'index'])->name('materi');
 Route::get('pr', [TugasRumahController::class, 'index'])->name('tugas');
 Route::get('pengumuman', [PengumumanController::class, 'index'])->name('pengumuman');
+
+Route::post('create', [MateriController::class, 'createData'])->name('tambahMateri');

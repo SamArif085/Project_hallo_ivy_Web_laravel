@@ -30,14 +30,6 @@
 
     <!-- Template Main CSS File -->
     <link href="css/style.css" rel="stylesheet">
-
-    <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Updated: Mar 09 2023 with Bootstrap v5.2.3
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body>
@@ -48,6 +40,7 @@
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
             class="bi bi-arrow-up-short"></i></a>
 
+    <script src="{{ asset('js/jQuery.js') }}"></script>
     <!-- Vendor JS Files -->
     <script src="vendor/apexcharts/apexcharts.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -57,6 +50,7 @@
     <script src="vendor/simple-datatables/simple-datatables.js"></script>
     <script src="vendor/tinymce/tinymce.min.js"></script>
     <script src="vendor/php-email-form/validate.js"></script>
+    @yield('script')
 
     <!-- Template Main JS File -->
     <script src="js/main.js"></script>

@@ -9,7 +9,8 @@ class PengumumanController extends Controller
     public function index()
     {
         $data = [
-            'title' => 'Pengumuman'
+            'title' => 'Pengumuman',
+            'cardTitle' => 'Data Pengumuman',
         ];
         return view('content/pengumuman', $data);
     }
