@@ -23,10 +23,11 @@ class MateriController extends Controller
 
     public function createData(Request $request)
     {
-        $validator = validator([
-            'pilKelas' => 'required',
-        ]);
+        // $validator = validator([
+        //     'pilKelas' => 'required',
+        // ]);
 
-        return redirect()->back()->with('mesagge', 'Data Kosong');
+
+        return redirect()->back()->with('success', 'Data Kosong');
     }
 }
