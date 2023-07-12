@@ -20,11 +20,11 @@ use App\Http\Controllers\TugasRumahController;
 */
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
-Route::post('/cekLogin', [LoginController::class, 'cekLogin'])->name('cekLogin');
+Route::post('cekLogin', [LoginController::class, 'cekLogin']);
 
-Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
-Route::get('materi', [MateriController::class, 'index'])->name('materi');
-Route::get('pr', [TugasRumahController::class, 'index'])->name('tugas');
-Route::get('pengumuman', [PengumumanController::class, 'index'])->name('pengumuman');
+Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
+Route::get('materi', [MateriController::class, 'index'])->name('materi')->middleware('auth');
+Route::get('pr', [TugasRumahController::class, 'index'])->name('tugas')->middleware('auth');
+Route::get('pengumuman', [PengumumanController::class, 'index'])->name('pengumuman')->middleware('auth');
 
-Route::post('create', [MateriController::class, 'createData'])->name('tambahMateri');
+Route::post('create', [MateriController::class, 'createData'])->name('tambahMateri')->middleware('auth');

@@ -12,7 +12,15 @@
                                     <h1 class="text-center mt-3" style="font-size: 70px">HALO-IVY</h1>
                                     {{-- <p class="text-center small">Enter your username & password to login</p> --}}
                                 </div>
-                                <form class="row g-3 needs-validation p-4" novalidate>
+                                @if (session()->has('error'))
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{ session('error') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
+                                @endif
+                                <form class="row g-3 needs-validation p-4" action="cekLogin" method="POST">
+                                    @csrf
                                     <div class="col-12 mb-3">
                                         {{-- <label for="yourUsername" class="form-label">Username</label> --}}
                                         <div class="input-group has-validation">
