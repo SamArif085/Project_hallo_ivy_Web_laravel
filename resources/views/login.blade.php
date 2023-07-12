@@ -19,8 +19,16 @@
                                             aria-label="Close"></button>
                                     </div>
                                 @endif
-                                <form class="row g-3 needs-validation p-4" action="cekLogin" method="POST">
+                                {{-- @if (error->any())
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{ session('error') }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
+                                @endif --}}
+                                <form class="row g-3 needs-validation p-4" action="{{ route('cekLogin') }}" method="POST">
                                     @csrf
+                                    {{-- @method('POST') --}}
                                     <div class="col-12 mb-3">
                                         {{-- <label for="yourUsername" class="form-label">Username</label> --}}
                                         <div class="input-group has-validation">

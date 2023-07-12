@@ -17,16 +17,28 @@ class LoginController extends Controller
 
     public function cekLogin(Request $request)
     {
+        // $username = $request->username;
+        // $password = $request->password;
+
         $ambilData = $request->validate([
             'username' => 'required',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
-        if(Auth::attempt($ambilData)){
+        // dd($ambilData['username'], $ambilData['password']);
+
+        if (Auth::attempt($ambilData)) {
             $request->session()->regenerate();
-            return redirect()->to('dashboard');
+            return redirect()->intended('dashboard');
         }
 
         return back()->with('error', 'Gagal Login');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        return redirect('/');
     }
 }

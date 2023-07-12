@@ -11,7 +11,7 @@
                 </ol>
             </nav>
         </div><!-- End Page Title -->
-
+        {{-- <p>{{ Auth::user()->password }}</p> --}}
         {{-- <section class="section dashboard">
             <div class="row">
 

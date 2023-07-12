@@ -20,7 +20,8 @@ use App\Http\Controllers\TugasRumahController;
 */
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
-Route::post('cekLogin', [LoginController::class, 'cekLogin']);
+Route::post('cek', [LoginController::class, 'cekLogin'])->name('cekLogin');
+Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
 Route::get('materi', [MateriController::class, 'index'])->name('materi')->middleware('auth');
