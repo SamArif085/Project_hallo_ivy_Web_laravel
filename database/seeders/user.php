@@ -19,6 +19,7 @@ class user extends Seeder
                 'name' => 'Bagio',
                 'username' => 'Bagio',
                 'password' =>  Hash::make('bagio'),
+                'role' => '1',
                 'created_at' => now(),
                 'updated_at' => now()
             ],

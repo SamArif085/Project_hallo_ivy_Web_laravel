@@ -25,14 +25,43 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        // dd($ambilData['username'], $ambilData['password']);
-
         if (Auth::attempt($ambilData)) {
             $request->session()->regenerate();
             return redirect()->intended('dashboard');
         }
 
         return back()->with('error', 'Gagal Login');
+    }
+
+    public function apiLogin(Request $request)
+    {
+
+        // $data = array(
+        //     'contoh' => 'contoh API',
+        // );
+
+        // return response()->json($data);
+
+        $ambilData = $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($ambilData)) {
+            $request->session()->regenerate();
+
+            $data = array(
+                'status' => 'success',
+                'message' => 'Berhasil Login',
+                'value' => [
+                    'id' => Auth::user()->id,
+                    'name' => Auth::user()->name,
+                    'username' => Auth::user()->username,
+                ]
+            );
+
+            return response()->json($data, 200);
+        }
     }
 
     public function logout(Request $request)

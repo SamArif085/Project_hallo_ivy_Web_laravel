@@ -29,3 +29,5 @@ Route::get('pr', [TugasRumahController::class, 'index'])->name('tugas')->middlew
 Route::get('pengumuman', [PengumumanController::class, 'index'])->name('pengumuman')->middleware('auth');
 
 Route::post('create', [MateriController::class, 'createData'])->name('tambahMateri')->middleware('auth');
+
+
