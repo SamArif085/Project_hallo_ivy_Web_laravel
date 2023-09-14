@@ -34,30 +34,31 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">No</th>
-                                        <th scope="col">Kelas</th>
-                                        <th scope="col">Judul</th>
+                                        <th scope="col">Kode Kelas</th>
+                                        <th scope="col">Keterangan Kelas</th>
                                         <th scope="col">Aksi</th>
-                                        {{-- <th scope="col">Start Date</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Brandon Jacob</td>
-                                        <td>Designer</td>
+                                    <tr scope="row">
+                                        <?php
+                                            $no = 1;
+                                            foreach($materi as $key => $row) {
+                                        ?>
+                                        <td><?= $no++ ?></td>
+                                        <td><?= $row->kode_kelas ?></td>
+                                        <td><?= $row->ket_kelas ?></td>
                                         <td>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                data-bs-target="#editMateri"><i class="bi bi-info-square"></i></button>
-                                            <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                                data-bs-target="#editMateri"><i class="bi bi-pencil-square"></i></button>
-                                            <button type="button" class="btn btn-danger"><i
-                                                    class="bi bi-trash"></i></button>
+                                            <a style="text-decoration-style: none" href="#{{ $row->kode_kelas }}"
+                                                class="btn btn-primary">
+                                                <i class="bi bi-info-square"></i>
+                                            </a>
                                         </td>
                                     </tr>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                             <!-- End Table with stripped rows -->
-
                         </div>
                     </div>
 
@@ -118,10 +119,10 @@
             </div>
         </div>
     </div>
-    input
 @endsection
 @section('script')
     <script>
+        
         // Function Form Text
         function kata() {
             let data =
@@ -188,8 +189,3 @@
         }
     </script>
 @endsection
-{{-- @if (session()->has('success'))
-    <script>
-        alert(`{{ session('success') }}`);
-    </script>
-@endif --}}

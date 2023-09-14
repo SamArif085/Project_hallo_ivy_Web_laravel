@@ -1,13 +1,14 @@
 <?php
 
 // header('Access-Control-Allow-Origin:  *');
-header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
+// header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
+// header("Access-Control-Allow-Origin: *");
+// header("Content-Type: application/json; charset=UTF-8");
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\TesController;
+// use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
+// use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,11 +21,5 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-Route::post('cek', [LoginController::class, 'apiLogin']);
-// Route::get('cek', [LoginController::class, 'apiLogin']);
-
-
+// Route::get('/test', [TesController::class, 'index']);
+Route::post('/test', [TesController::class, 'getUsers']);
