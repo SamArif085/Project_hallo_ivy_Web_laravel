@@ -7,7 +7,7 @@
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item">{{ $title }}</li>
+                    {{-- <li class="breadcrumb-item">{{ $title }}</li> --}}
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -18,16 +18,16 @@
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">{{ $cardTitle }}</h5>
+                            {{-- <h5 class="card-title">{{ $cardTitle }}</h5> --}}
 
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                            {{-- <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                 data-bs-target="#addMateri">
                                 Tambah Materi
                             </button>
                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addQuiz">
                                 Tambah Quiz
-                            </button>
+                            </button> --}}
 
                             <!-- Table with stripped rows -->
                             <table class="table datatable">
@@ -49,7 +49,8 @@
                                         <td><?= $row->kode_kelas ?></td>
                                         <td><?= $row->ket_kelas ?></td>
                                         <td>
-                                            <a style="text-decoration-style: none" href="#{{ $row->kode_kelas }}"
+                                            <a style="text-decoration-style: none"
+                                                href="{{ route('detail', ['kode_kel' => $row->kode_kelas]) }}"
                                                 class="btn btn-primary">
                                                 <i class="bi bi-info-square"></i>
                                             </a>
@@ -122,7 +123,6 @@
 @endsection
 @section('script')
     <script>
-        
         // Function Form Text
         function kata() {
             let data =

@@ -25,9 +25,8 @@ Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
 Route::get('materi', [MateriController::class, 'index'])->name('materi')->middleware('auth');
+Route::get('detail/{kode_kel}', [MateriController::class, 'detailData'])->name('detail')->middleware('auth');
 Route::get('pr', [TugasRumahController::class, 'index'])->name('tugas')->middleware('auth');
 Route::get('pengumuman', [PengumumanController::class, 'index'])->name('pengumuman')->middleware('auth');
 
 Route::post('create', [MateriController::class, 'createData'])->name('tambahMateri')->middleware('auth');
-
-

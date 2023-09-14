@@ -36,13 +36,24 @@ class MateriController extends Controller
         return view('content/materi', $data);
     }
 
-    public function createData(Request $request)
+    public function detailData($kode_kel)
     {
-        // $validator = validator([
-        //     'pilKelas' => 'required',
-        // ]);
+        $idGuru = Auth::user()->id_guru;
+        $dataMateri = $this->model->getMateri($idGuru);
 
+        // dd($dataMateri);
 
-        return redirect()->back()->with('success', 'Data Kosong');
+        $modal = [
+            'materi' => 'Tambah Materi',
+            'quiz' => 'Tambah Quiz',
+        ];
+
+        $data = [
+            'title' => 'Detail Materi',
+            'cardTitle' => 'Detail Materi',
+            'modalTitle' => $modal,
+            'materi' => $dataMateri,
+        ];
+        return view('content/detailData', $data);
     }
 }
