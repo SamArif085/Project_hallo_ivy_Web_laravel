@@ -13,7 +13,6 @@ class MateriModel extends Model
 
     public function getMateri($idGuru)
     {
-        // return DB::select("SELECT DISTINCT(dm.kode_kelas) FROM detail_guru AS dg JOIN users AS u ON u.id_guru = dg.id_guru JOIN detail_materi AS dm ON dm.kode_kelas = dg.id_kel WHERE dg.id_guru = $idGuru ORDER BY dm.kode_kelas ASC")->array();
         return DB::table('detail_guru as dg')
             ->join('users as u', 'u.id_guru', '=', 'dg.id_guru')
             ->join('detail_materi as dm', 'dm.kode_kelas', '=', 'dg.id_kel')
@@ -22,6 +21,15 @@ class MateriModel extends Model
             ->distinct()
             ->where('dg.id_guru', '=', "$idGuru")
             ->orderBy('dm.kode_kelas')
+            ->get();
+    }
+
+    public function getDetail($kode_kel)
+    {
+        return DB::table('materi as m')
+            ->join('detail_materi as dm', 'dm.id_materi', '=', 'm.id')
+            ->where('dm.kode_kelas', '=', "$kode_kel")
+            ->orderBy('m.jenis_tema')
             ->get();
     }
 }

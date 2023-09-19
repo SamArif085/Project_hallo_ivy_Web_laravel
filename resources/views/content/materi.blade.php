@@ -18,16 +18,7 @@
 
                     <div class="card">
                         <div class="card-body">
-                            {{-- <h5 class="card-title">{{ $cardTitle }}</h5> --}}
-
-                            <!-- Button trigger modal -->
-                            {{-- <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                data-bs-target="#addMateri">
-                                Tambah Materi
-                            </button>
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addQuiz">
-                                Tambah Quiz
-                            </button> --}}
+                            <h5 class="card-title">{{ $cardTitle }}</h5>
 
                             <!-- Table with stripped rows -->
                             <table class="table datatable">
@@ -50,7 +41,7 @@
                                         <td><?= $row->ket_kelas ?></td>
                                         <td>
                                             <a style="text-decoration-style: none"
-                                                href="{{ route('detail', ['kode_kel' => $row->kode_kelas]) }}"
+                                                href="{{ route('detail', ['kode_kel' => encrypt($row->kode_kelas)]) }}"
                                                 class="btn btn-primary">
                                                 <i class="bi bi-info-square"></i>
                                             </a>
@@ -121,7 +112,7 @@
         </div>
     </div>
 @endsection
-@section('script')
+{{-- @section('script')
     <script>
         // Function Form Text
         function kata() {
@@ -188,4 +179,4 @@
             $('#formVideo').html('')
         }
     </script>
-@endsection
+@endsection --}}
