@@ -42,12 +42,12 @@
              </a>
          </li><!-- End F.A.Q Page Nav -->
 
-         <li class="nav-item">
+         {{-- <li class="nav-item">
              <a class="nav-link {{ request()->routeIs('pengumuman') ? '' : 'collapsed' }}" href="{{ route('pengumuman') }}">
                  <i class="bi bi-megaphone"></i>
                  <span>Pengumuman</span>
              </a>
-         </li><!-- End Contact Page Nav -->
+         </li><!-- End Contact Page Nav --> --}}
 
      </ul>
 

@@ -42,6 +42,7 @@ class MateriController extends Controller
         $modal = [
             'materi' => 'Tambah Materi',
             'quiz' => 'Tambah Quiz',
+            'editMateri' => 'Ubah Materi',
         ];
 
         $data = [
@@ -64,6 +65,10 @@ class MateriController extends Controller
         $gambar_materi = $request->gambar_materi;
         $created_at = date('Y-m-d H:i:s');
 
+        sleep(2);
+
+        // dd($gambar_cover);
+
         DB::transaction(
             function () use ($jenis_tema, $judul_materi, $link_materi, $gambar_cover, $gambar_materi, $created_at, $kode_kelas) {
                 $table1_id = DB::table('materi')->insertGetId([
@@ -73,6 +78,7 @@ class MateriController extends Controller
                     'gambar_cover' => $gambar_cover,
                     'gambar_materi' => $gambar_materi,
                     'created_at' => $created_at,
+                    'update_at' => $created_at,
                 ]);
 
                 DB::table('detail_materi')
@@ -106,5 +112,41 @@ class MateriController extends Controller
         session()->flash('success', 'Data berhasil ditambahkan');
         return redirect()->back();
         // return view('content/detailData' . $kode_kelas, ['showModal' => true]);
+    }
+
+    public function updateData(Request $request)
+    {
+        $id_materi = decrypt($request->id_materi);
+        $jenis_tema = $request->jenis_tema;
+        $judul_materi = $request->judul_materi;
+        $link_materi = $request->link_materi;
+        $gambar_cover = $request->gambar_cover;
+        $gambar_materi = $request->gambar_materi;
+        $update_at = date('Y-m-d H:i:s');
+
+        sleep(2);
+        // dd($id_materi, $jenis_tema, $judul_materi, $link_materi, $gambar_cover, $gambar_materi, $update_at);
+
+        DB::transaction(
+            function () use ($id_materi, $jenis_tema, $judul_materi, $link_materi, $gambar_cover, $gambar_materi, $update_at) {
+                DB::table('materi')
+                    ->where('id', '=', "$id_materi")
+                    ->update([
+                        'jenis_tema' => $jenis_tema,
+                        'judul_materi' => $judul_materi,
+                        'link_materi' => $link_materi,
+                        'gambar_cover' => $gambar_cover,
+                        'gambar_materi' => $gambar_materi,
+                        'update_at' => $update_at,
+                    ]);
+            }
+        );
+
+        session()->flash('success', 'Data berhasil diubah');
+        return redirect()->back();
+    }
+
+    public function deleteData(Request $request)
+    {
     }
 }
