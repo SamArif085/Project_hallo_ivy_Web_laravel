@@ -132,7 +132,6 @@
                     $('#editMateri').modal('show');
                 }
             });
-
         });
         $('#simpanEdit').click(function(e) {
             e.preventDefault();

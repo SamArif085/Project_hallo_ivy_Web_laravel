@@ -38,10 +38,10 @@
                                         ?>
                                         <td><?= $no++ ?></td>
                                         <td><?= $row->pertanyaan ?></td>
-                                        {{-- <td><?= $row->image ?></td> --}}
+                                        {{-- <td><?= $row->id_quiz ?></td> --}}
                                         <td>
-                                            <a href="javascript:void(0)"
-                                                class="btn btn-primary">
+                                            <a href="javascript:void(0)" class="btn btn-primary" id="btn-detail-quiz"
+                                                data-id="{{ encrypt($row->id_quiz) }}">
                                                 <i class="bi bi-info-square"></i>
                                             </a>
                                         </td>
@@ -61,121 +61,78 @@
 
     <!-- Kumpulan Modal -->
     <!-- Modal Tambah Materi -->
-    <div class="modal fade" id="addMateri" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md">
+    <div class="modal fade" id="detailQuiz" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $modalTitle['tambah'] }}</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $modalTitle['detail'] }}</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('tambahMateri') }}" method="post">
+                    <div id="loading-tambah" style="display: none;">
+                        <button class="btn btn-primary" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Loading...</span>
+                        </button>
+                    </div>
+                    <form id="form-detail-quiz">
                         @csrf
                         <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Pilih Kelas</label>
-                            <select class="form-select" id="inputGroupSelect01" name="pilKelas" required>
-                                <option selected disabled value="">Pilih Kelas...</option>
-                                <option value="1">Kelas Satu</option>
-                                <option value="2">Kelas Dua</option>
-                                <option value="3">DST</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Pilih Materi Yang Akan Di
-                                Upload</label>
-                            <div>
-                                <button type="button" class="btn btn-warning" onclick="kata()"><i
-                                        class="bi bi-fonts"></i></button>
-                                <button type="button" class="btn btn-secondary" onclick="gambar()"><i
-                                        class="bi bi-image"></i></button>
-                                <button type="button" class="btn btn-primary" onclick="video()"><i
-                                        class="bi bi-play-btn"></i></button>
-                            </div>
-                        </div>
-                        <div id="formText">
-                            <!-- Form dinamis akan ditambahkan di sini -->
-                        </div>
-                        <div id="formGambar">
-                            <!-- Form dinamis akan ditambahkan di sini -->
-                        </div>
-                        <div id="formVideo">
-                            <!-- Form dinamis akan ditambahkan di sini -->
+                            <label for="exampleFormControlInput1" class="form-label">Pertanyaan</label>
+                            <input type="text" class="form-control mb-3" name="perta" id="perta" required>
+                            <label for="exampleFormControlInput1" class="form-label">Link Gambar</label>
+                            <textarea name="imageQuiz" id="imageQuiz" cols="10" rows="2" class="form-control mb-3"></textarea>
+                            {{-- <input type="text" class="form-control mb-3" name="imageQuiz" id="imageQuiz" required> --}}
                         </div>
                 </div>
                 <div class="modal-footer">
-                    {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> --}}
-                    <button type="submit" class="btn btn-success">Simpan Data</button>
+                    <button type="button" class="btn btn-danger simpan" data-bs-dismiss="modal">Tutup Modal</button>
                 </div>
                 </form>
             </div>
         </div>
     </div>
-@endsection
-{{-- @section('script')
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
-        // Function Form Text
-        function kata() {
-            let data =
-                `<label for="exampleFormControlInput1" class="form-label">Deskripsi</label>
-                        <div class="row">
-                            <div class="col-10">
-                                <input type="text" class="form-control mb-3" name="text" id="text" required>
-                            </div>
-                            <div class="col-2">
-                                <button type="button" class="btn btn-danger" onclick="hapus()"><i
-                                        class="bi bi-trash"></i></button>
-                            </div>
-                        </div>`;
-            // console.log(data);
-            $('#formText').html(data)
-        }
-        // Function Hapus Form Text
-        function hapus() {
-            $('#formText').html('')
-        }
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-        // Fucntion Form Gambar
-        function gambar() {
-            let data =
-                `<label for="exampleFormControlInput1" class="form-label">Upload Gambar</label>
-                        <div class="row">
-                            <div class="col-10">
-                                <input type="file" class="form-control mb-3" name="text" id="text" required>
-                            </div>
-                            <div class="col-2">
-                                <button type="button" class="btn btn-danger" onclick="hapusGam()"><i
-                                        class="bi bi-trash"></i></button>
-                            </div>
-                        </div>`;
-            // console.log(data);
-            $('#formGambar').html(data)
-        }
+        // Button Detail Quiz
+        $('body').on('click', '#btn-detail-quiz', function() {
+            let id = $(this).data('id');
+            // console.log(id);
 
-        // Function Hapus Form Gambar
-        function hapusGam() {
-            $('#formGambar').html('')
-        }
-
-        // Function Form Video
-        function video() {
-            let data =
-                `<label for="exampleFormControlInput1" class="form-label">Upload Video</label>
-                <div class="row">
-                    <div class="col-10">
-                        <input type="file" class="form-control mb-3" name="text" id="text" required>
-                    </div>
-                    <div class="col-2">
-                        <button type="button" class="btn btn-danger" onclick="hapusVid()"><i
-                                class="bi bi-trash"></i></button>
-                    </div>
-                </div>`;
-            // console.log(data);
-            $('#formVideo').html(data)
-        }
-
-        // Function Hapus Form Video
-        function hapusVid() {
-            $('#formVideo').html('')
-        }
+            $.ajax({
+                type: "GET",
+                url: `/detailDataQuiz/${id}`,
+                // data: "data",
+                // cache: false,
+                beforeSend: function() {
+                    // $("#loading-detail-quiz").show();
+                    // $("#form-detail-quiz").hide();
+                    Swal.fire({
+                        position: 'center',
+                        title: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        // toast: true,
+                        html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" > Loading... < /span></div>',
+                        timer: 2000
+                    });
+                },
+                success: function(response) {
+                    $('#idQuiz').val(response.idQuiz);
+                    $('#perta').val(response.perta);
+                    $('#imageQuiz').val(response.imageQuiz);
+                    $('#detailQuiz').modal('show');
+                }
+            });
+        });
     </script>
-@endsection --}}
+@endsection

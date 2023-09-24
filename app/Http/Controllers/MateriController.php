@@ -121,34 +121,6 @@ class MateriController extends Controller
         return response()->json($data);
     }
 
-    public function showData($id_materi)
-    {
-        // $id = $request->id;
-
-        // $materi = DB::table('materi')
-        //     ->where('id', '=', $id_materi)
-        //     ->get();
-
-        $materi = DB::select("select * from materi where id = '$id_materi'");
-
-        // dd($materi);
-
-        // var_dump($materi[0]->jenis_tema);
-        // die;
-        $data = [
-            'status' => 200,
-            'message' => 'Data Berhasil Disimpan',
-            'idMateri' => $materi[0]->id,
-            'jenisTema' => $materi[0]->jenis_tema,
-            'judulMateri' => $materi[0]->judul_materi,
-            'linkMateri' => $materi[0]->link_materi,
-            'gambarCover' => $materi[0]->gambar_cover,
-            'gambarMateri' => $materi[0]->gambar_materi,
-        ];
-
-        return response()->json($data);
-    }
-
     public function updateData(Request $request)
     {
         $data = array(
@@ -245,8 +217,6 @@ class MateriController extends Controller
 
     public function detailQuiz($idMateri)
     {
-        // $idGuru = Auth::user()->id_guru;
-        // $dataQuiz = $this->model->getQuiz($idGuru);
         $dataQuiz = DB::table('quiz AS q')
             ->join('detail_quiz_materi AS dqm', 'dqm.id_quiz', '=', 'q.id')
             ->join('materi AS m', 'm.id', '=', 'dqm.id_materi')
@@ -257,7 +227,8 @@ class MateriController extends Controller
         $modal = [
             'tambah' => 'Tambah Quiz',
             'edit' => 'Ubah Quiz',
-            'hapus' => 'Hapus Quiz'
+            'hapus' => 'Hapus Quiz',
+            'detail' => 'Detail Quiz'
         ];
 
         $data = [
@@ -267,5 +238,43 @@ class MateriController extends Controller
             'quiz' => $dataQuiz,
         ];
         return view('content/quiz', $data);
+    }
+
+    public function showData($id_materi)
+    {
+        $materi = DB::select("select * from materi where id = '$id_materi'");
+
+        $data = [
+            'status' => 200,
+            // 'message' => 'Data Berhasil Disimpan',
+            'idMateri' => $materi[0]->id,
+            'jenisTema' => $materi[0]->jenis_tema,
+            'judulMateri' => $materi[0]->judul_materi,
+            'linkMateri' => $materi[0]->link_materi,
+            'gambarCover' => $materi[0]->gambar_cover,
+            'gambarMateri' => $materi[0]->gambar_materi,
+        ];
+
+        return response()->json($data);
+    }
+
+    public function detailDataQuiz($idQuiz)
+    {
+        $dataQuiz = DB::table('quiz AS q')
+            ->join('detail_quiz_materi AS dqm', 'dqm.id_quiz', '=', 'q.id')
+            ->join('materi AS m', 'm.id', '=', 'dqm.id_materi')
+            ->select('q.id AS id_quiz', 'q.pertanyaan', 'q.image AS image_quiz')
+            ->where('q.id', '=', decrypt($idQuiz))
+            ->get();
+
+        sleep(2);
+
+        $data = [
+            'status' => 200,
+            'idQuiz' => $dataQuiz[0]->id_quiz,
+            'perta' => $dataQuiz[0]->pertanyaan,
+            'imageQuiz' => $dataQuiz[0]->image_quiz,
+        ];
+        return response()->json($data);
     }
 }

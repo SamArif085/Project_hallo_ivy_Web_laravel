@@ -33,4 +33,5 @@ Route::post('create', [MateriController::class, 'createData'])->name('tambahMate
 Route::post('update', [MateriController::class, 'updateData'])->name('editMateri')->middleware('auth');
 Route::post('delete', [MateriController::class, 'deleteData'])->name('hapusMateri')->middleware('auth');
 
-Route::get('/detailShow/{id_materi}', [MateriController::class, 'showData'])->name('editDataMateri')->middleware('auth');
+Route::get('/detailShow/{id_materi}', [MateriController::class, 'showData'])->middleware('auth');
+Route::get('/detailDataQuiz/{id_quiz}', [MateriController::class, 'detailDataQuiz'])->middleware('auth');
