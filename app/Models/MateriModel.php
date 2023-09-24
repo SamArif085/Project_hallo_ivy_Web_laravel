@@ -27,6 +27,7 @@ class MateriModel extends Model
     public function getDetail($kode_kel)
     {
         return DB::table('materi as m')
+            ->select('m.id AS id_materi', 'm.jenis_tema', 'm.judul_materi', 'm.link_materi', 'm.gambar_cover', 'm.gambar_materi', 'm.created_at', 'm.update_at', 'dm.*')
             ->join('detail_materi as dm', 'dm.id_materi', '=', 'm.id')
             ->where('dm.kode_kelas', '=', "$kode_kel")
             ->orderBy('m.jenis_tema')

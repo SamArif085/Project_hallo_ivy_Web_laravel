@@ -38,11 +38,13 @@ class MateriController extends Controller
     public function detailData($kode_kel)
     {
         $dataMateri = $this->model->getDetail(decrypt($kode_kel));
+        // $dataMateri = $this->model->getDetail($kode_kel);
 
         $modal = [
             'materi' => 'Tambah Materi',
             'quiz' => 'Tambah Quiz',
             'editMateri' => 'Ubah Materi',
+            'hapusMateri' => 'Hapus Materi',
         ];
 
         $data = [
@@ -57,17 +59,15 @@ class MateriController extends Controller
 
     public function createData(Request $request)
     {
-        $kode_kelas = decrypt($request->kode_kelas);
-        $jenis_tema = $request->jenis_tema;
-        $judul_materi = $request->judul_materi;
-        $link_materi = $request->link_materi;
-        $gambar_cover = $request->gambar_cover;
-        $gambar_materi = $request->gambar_materi;
+        $kode_kelas = decrypt($request->kodeKelas);
+        $jenis_tema = $request->jenisTemaTam;
+        $judul_materi = $request->judulMatTam;
+        $link_materi = $request->linkMatTam;
+        $gambar_cover = $request->gamCovTam;
+        $gambar_materi = $request->gamMatTam;
         $created_at = date('Y-m-d H:i:s');
 
-        sleep(2);
-
-        // dd($gambar_cover);
+        sleep(1);
 
         DB::transaction(
             function () use ($jenis_tema, $judul_materi, $link_materi, $gambar_cover, $gambar_materi, $created_at, $kode_kelas) {
@@ -109,44 +109,163 @@ class MateriController extends Controller
             }
         );
 
-        session()->flash('success', 'Data berhasil ditambahkan');
-        return redirect()->back();
-        // return view('content/detailData' . $kode_kelas, ['showModal' => true]);
+        $data = [
+            'status' => 200,
+            'message' => 'Data Berhasil Disimpan',
+            'dataIsi' => [
+                'jenis_tema' => $jenis_tema,
+                'judul_materi' => $judul_materi,
+            ],
+        ];
+
+        return response()->json($data);
+    }
+
+    public function showData($id_materi)
+    {
+        // $id = $request->id;
+
+        // $materi = DB::table('materi')
+        //     ->where('id', '=', $id_materi)
+        //     ->get();
+
+        $materi = DB::select("select * from materi where id = '$id_materi'");
+
+        // dd($materi);
+
+        // var_dump($materi[0]->jenis_tema);
+        // die;
+        $data = [
+            'status' => 200,
+            'message' => 'Data Berhasil Disimpan',
+            'idMateri' => $materi[0]->id,
+            'jenisTema' => $materi[0]->jenis_tema,
+            'judulMateri' => $materi[0]->judul_materi,
+            'linkMateri' => $materi[0]->link_materi,
+            'gambarCover' => $materi[0]->gambar_cover,
+            'gambarMateri' => $materi[0]->gambar_materi,
+        ];
+
+        return response()->json($data);
     }
 
     public function updateData(Request $request)
     {
-        $id_materi = decrypt($request->id_materi);
-        $jenis_tema = $request->jenis_tema;
-        $judul_materi = $request->judul_materi;
-        $link_materi = $request->link_materi;
-        $gambar_cover = $request->gambar_cover;
-        $gambar_materi = $request->gambar_materi;
-        $update_at = date('Y-m-d H:i:s');
+        $data = array(
+            'id_materi' => $request->id_materi,
+            'jenis_tema' => $request->jenis_tema,
+            'judul_materi' => $request->judul_materi,
+            'link_materi' => $request->link_materi,
+            'gambar_cover' => $request->gambar_cover,
+            'gambar_materi' => $request->gambar_materi,
+            'update_at' => date('Y-m-d H:i:s'),
+        );
+
+        // var_dump($data);
+        // die;
 
         sleep(2);
-        // dd($id_materi, $jenis_tema, $judul_materi, $link_materi, $gambar_cover, $gambar_materi, $update_at);
 
         DB::transaction(
-            function () use ($id_materi, $jenis_tema, $judul_materi, $link_materi, $gambar_cover, $gambar_materi, $update_at) {
+            function () use ($data) {
                 DB::table('materi')
-                    ->where('id', '=', "$id_materi")
+                    ->where('id', '=', $data['id_materi'])
                     ->update([
-                        'jenis_tema' => $jenis_tema,
-                        'judul_materi' => $judul_materi,
-                        'link_materi' => $link_materi,
-                        'gambar_cover' => $gambar_cover,
-                        'gambar_materi' => $gambar_materi,
-                        'update_at' => $update_at,
+                        'jenis_tema' => $data['jenis_tema'],
+                        'judul_materi' => $data['judul_materi'],
+                        'link_materi' => $data['link_materi'],
+                        'gambar_cover' => $data['gambar_cover'],
+                        'gambar_materi' => $data['gambar_materi'],
+                        'update_at' => $data['update_at'],
                     ]);
             }
         );
 
-        session()->flash('success', 'Data berhasil diubah');
-        return redirect()->back();
+        $datas = [
+            'status' => 200,
+            'message' => 'Data Berhasil Disimpan',
+            'dataIsi' => [
+                'jenis_tema' => $data['jenis_tema'],
+                'judul_materi' => $data['judul_materi'],
+            ],
+        ];
+
+        return response()->json($datas);
+
+        // session()->flash('success', 'Data berhasil diubah');
+        // return redirect()->back();
     }
 
     public function deleteData(Request $request)
     {
+        $data = array(
+            'kode_kelas' => decrypt($request->kode_kelas),
+            'id_materi' => $request->id_materi,
+            'jenis_tema' => $request->jenis_tema,
+            'judul_materi' => $request->judul_materi,
+            'link_materi' => $request->link_materi,
+            'gambar_cover' => $request->gambar_cover,
+            'gambar_materi' => $request->gambar_materi,
+            'update_at' => date('Y-m-d H:i:s'),
+        );
+
+        sleep(2);
+
+        DB::transaction(
+            function () use ($data) {
+
+                DB::table('detail_materi_siswa')
+                    ->where('id_materi', '=', $data['id_materi'])
+                    ->delete();
+
+                DB::table('detail_materi')
+                    ->where('id_materi', '=', $data['id_materi'])
+                    ->delete();
+
+                DB::table('materi')
+                    ->where('id', '=', $data['id_materi'])
+                    ->delete();
+            }
+        );
+
+        $datas = [
+            'status' => 200,
+            'message' => 'Data Berhasil Dihapus',
+            'dataIsi' => [
+                'jenis_tema' => $data['jenis_tema'],
+                'judul_materi' => $data['judul_materi'],
+            ],
+        ];
+
+        return response()->json($datas);
+
+        // session()->flash('success', 'Data berhasil dihapus');
+        // return redirect()->back();
+    }
+
+    public function detailQuiz($idMateri)
+    {
+        // $idGuru = Auth::user()->id_guru;
+        // $dataQuiz = $this->model->getQuiz($idGuru);
+        $dataQuiz = DB::table('quiz AS q')
+            ->join('detail_quiz_materi AS dqm', 'dqm.id_quiz', '=', 'q.id')
+            ->join('materi AS m', 'm.id', '=', 'dqm.id_materi')
+            ->select('q.id AS id_quiz', 'q.pertanyaan', 'q.image AS image_quiz')
+            ->where('m.id', '=', decrypt($idMateri))
+            ->get();
+
+        $modal = [
+            'tambah' => 'Tambah Quiz',
+            'edit' => 'Ubah Quiz',
+            'hapus' => 'Hapus Quiz'
+        ];
+
+        $data = [
+            'title' => 'Quiz',
+            'cardTitle' => 'Data Quiz',
+            'modalTitle' => $modal,
+            'quiz' => $dataQuiz,
+        ];
+        return view('content/quiz', $data);
     }
 }

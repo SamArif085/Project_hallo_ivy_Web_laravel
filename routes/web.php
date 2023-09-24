@@ -27,7 +27,10 @@ Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard')->mi
 Route::get('materi', [MateriController::class, 'index'])->name('materi')->middleware('auth');
 Route::get('detail/{kode_kel}', [MateriController::class, 'detailData'])->name('detail')->middleware('auth');
 Route::get('tugasRumah', [TugasRumahController::class, 'index'])->name('tugas')->middleware('auth');
-// Route::get('pengumuman', [PengumumanController::class, 'index'])->name('pengumuman')->middleware('auth');
+Route::get('detailQuiz/{id_materi}', [MateriController::class, 'detailQuiz'])->name('detQuiz')->middleware('auth');
 
 Route::post('create', [MateriController::class, 'createData'])->name('tambahMateri')->middleware('auth');
 Route::post('update', [MateriController::class, 'updateData'])->name('editMateri')->middleware('auth');
+Route::post('delete', [MateriController::class, 'deleteData'])->name('hapusMateri')->middleware('auth');
+
+Route::get('/detailShow/{id_materi}', [MateriController::class, 'showData'])->name('editDataMateri')->middleware('auth');

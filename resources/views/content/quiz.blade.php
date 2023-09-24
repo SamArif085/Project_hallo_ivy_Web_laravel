@@ -1,4 +1,4 @@
-@extends('layout.mainLayout')
+@extends('layout.detail2Layout')
 @section('content')
     <main id="main" class="main">
 
@@ -24,24 +24,23 @@
                             <table class="table datatable">
                                 <thead>
                                     <tr>
-                                        <th scope="col">No</th>
-                                        <th scope="col">Kode Kelas</th>
-                                        <th scope="col">Keterangan Kelas</th>
-                                        <th scope="col">Aksi</th>
+                                        <th>No</th>
+                                        <th>Pertanyaan</th>
+                                        {{-- <th>Gambar</th> --}}
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr scope="row">
                                         <?php
                                             $no = 1;
-                                            foreach($materi as $key => $row) {
+                                            foreach($quiz as $key => $row) {
                                         ?>
                                         <td><?= $no++ ?></td>
-                                        <td><?= $row->kode_kelas ?></td>
-                                        <td><?= $row->ket_kelas ?></td>
+                                        <td><?= $row->pertanyaan ?></td>
+                                        {{-- <td><?= $row->image ?></td> --}}
                                         <td>
-                                            <a style="text-decoration-style: none"
-                                                href="{{ route('detail', ['kode_kel' => encrypt($row->kode_kelas)]) }}"
+                                            <a href="javascript:void(0)"
                                                 class="btn btn-primary">
                                                 <i class="bi bi-info-square"></i>
                                             </a>
@@ -66,7 +65,7 @@
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $modalTitle['materi'] }}</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $modalTitle['tambah'] }}</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

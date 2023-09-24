@@ -16,10 +16,11 @@ class user extends Seeder
     {
         $data = [
             [
-                'name' => 'Bagio',
-                'username' => 'Bagio',
-                'password' =>  Hash::make('bagio'),
+                'name' => 'Laila Nur Latifa',
+                'username' => 'lailaNur',
+                'password' =>  Hash::make('lailaNur'),
                 'role' => '1',
+                'id_guru' => '1',
                 'created_at' => now(),
                 'updated_at' => now()
             ],

@@ -10,8 +10,8 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="/img/favicon.png" rel="icon">
-    <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="/../img/favicon.png" rel="icon">
+    <link href="/../img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -20,20 +20,20 @@
         rel="stylesheet">
 
     <!-- Vendor CSS Files -->
-    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-    <link href="/vendor/quill/quill.snow.css" rel="stylesheet">
-    <link href="/vendor/quill/quill.bubble.css" rel="stylesheet">
-    <link href="/vendor/remixicon/remixicon.css" rel="stylesheet">
-    <link href="/vendor/simple-datatables/style.css" rel="stylesheet">
+    <link href="/../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/../vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/../vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/../vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="/../vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="/../vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="/../vendor/simple-datatables/style.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="/css/style.css" rel="stylesheet">
+    <link href="/../css/style.css" rel="stylesheet">
 </head>
 
 <body>
-    @include('layout.headerDetail')
+    @include('layout.header2Detail')
     @include('layout.aside')
     @yield('content')
     @include('layout.footer')
@@ -43,17 +43,17 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Vendor JS Files -->
-    <script src="/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="/vendor/chart.js/chart.umd.js"></script>
-    <script src="/vendor/echarts/echarts.min.js"></script>
-    <script src="/vendor/quill/quill.min.js"></script>
-    <script src="/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="/vendor/tinymce/tinymce.min.js"></script>
-    <script src="/vendor/php-email-form/validate.js"></script>
+    <script src="/../vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="/../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/../vendor/chart.js/chart.umd.js"></script>
+    <script src="/../vendor/echarts/echarts.min.js"></script>
+    <script src="/../vendor/quill/quill.min.js"></script>
+    <script src="/../vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="/../vendor/tinymce/tinymce.min.js"></script>
+    <script src="/../vendor/php-email-form/validate.js"></script>
 
     <!-- Template Main JS File -->
-    <script src="/js/main.js"></script>
+    <script src="/../js/main.js"></script>
 
     <script>
         $.ajaxSetup({
@@ -63,7 +63,7 @@
         });
 
         // Simpan Tambah Data
-        $('#simpanTambah').click(function(e) {
+        $('#simpan-data').click(function(e) {
             e.preventDefault();
 
             let form = $('#form_tambah').serialize();
@@ -74,7 +74,7 @@
                 data: form,
                 dataType: "JSON",
                 beforeSend: function() {
-                    $("#simpanTambah").hide();
+                    $(".simpan").hide();
                     $("#loading-tambah").show();
                 }, //menampilkan loading saat mengirimkan data
                 success: function(response) {
@@ -91,20 +91,18 @@
                     );
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
-                    $("#simpanTambah").show();
-                    $("#loading-tambah").hide();
                     Swal.fire({
-                        type: 'error',
-                        icon: 'error',
-                        title: `${xhr.status}`,
-                        text: 'Semua Bidang Harap Diisi !!!',
-                        showConfirmButton: true,
-                        // location: reload,
-                        // timer: 1500
-                    });
-                    // .then((result) =>
-                    //     location.reload()
-                    // );
+                            type: 'error',
+                            icon: 'error',
+                            title: `${xhr.status}`,
+                            text: 'Semua Bidang Harap Diisi !!!',
+                            showConfirmButton: false,
+                            // location: reload,
+                            timer: 1500
+                        })
+                        .then((result) =>
+                            location.reload()
+                        );
                     // alert(xhr.status + "\n" + xhr.responseText + "\n" + thrownError);
                 }
             });
@@ -161,19 +159,16 @@
                     );
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
-                    $("#loading-edit").hide();
-                    $(".simpanEdit").show();
                     Swal.fire({
                         type: 'error',
                         icon: 'error',
                         title: `${xhr.status}`,
-                        showConfirmButton: true,
+                        showConfirmButton: false,
                         // location: reload,
-                        // timer: 1500
-                    })
-                    // .then((result) =>
-                    //     location.reload()
-                    // );
+                        timer: 1500
+                    }).then((result) =>
+                        location.reload()
+                    );
                 },
                 // complete function
                 // complete: function() {

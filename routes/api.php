@@ -5,9 +5,10 @@
 // header("Access-Control-Allow-Origin: *");
 // header("Content-Type: application/json; charset=UTF-8");
 
-use App\Http\Controllers\Api\TesController;
-// use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+// use Illuminate\Http\Request;
+use App\Http\Controllers\MateriController;
+use App\Http\Controllers\Api\TesController;
 // use App\Http\Controllers\LoginController;
 
 /*
@@ -23,3 +24,4 @@ use Illuminate\Support\Facades\Route;
 
 // Route::get('/test', [TesController::class, 'index']);
 Route::post('/test', [TesController::class, 'getUsers']);
+Route::post('create', [MateriController::class, 'createData']);
