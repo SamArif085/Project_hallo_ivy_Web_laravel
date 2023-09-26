@@ -16,10 +16,13 @@ class MateriController extends Controller
         $this->model = new MateriModel();
     }
 
+    // Kumpulan Function Materi
+    // Data Materi Untuk Datatables
     public function index()
     {
         $idGuru = Auth::user()->id_guru;
-        $dataMateri = $this->model->getMateri($idGuru);
+        // $dataMateri = $this->model->getMateri($idGuru);
+        $dataMateri = DB::select('select * from kelas');
 
         $modal = [
             'materi' => 'Tambah Materi',
@@ -35,6 +38,7 @@ class MateriController extends Controller
         return view('content/materi', $data);
     }
 
+    // Data Detail Materi Untuk Datatables
     public function detailData($kode_kel)
     {
         $dataMateri = $this->model->getDetail(decrypt($kode_kel));
@@ -57,6 +61,7 @@ class MateriController extends Controller
         return view('content/detailData', $data);
     }
 
+    // Function Tambah Data Materi
     public function createData(Request $request)
     {
         $kode_kelas = decrypt($request->kodeKelas);
@@ -121,6 +126,7 @@ class MateriController extends Controller
         return response()->json($data);
     }
 
+    // Function Ubah Data Materi
     public function updateData(Request $request)
     {
         $data = array(
@@ -168,6 +174,7 @@ class MateriController extends Controller
         // return redirect()->back();
     }
 
+    // Function Hapus Data Materi
     public function deleteData(Request $request)
     {
         $data = array(
@@ -215,6 +222,28 @@ class MateriController extends Controller
         // return redirect()->back();
     }
 
+    // Ambil Data Materi Untuk Detail Materi Isi Form Modal Ubah Dan Hapus
+    public function showData($id_materi)
+    {
+        $materi = DB::select("select * from materi where id = '$id_materi'");
+
+        $data = [
+            'status' => 200,
+            // 'message' => 'Data Berhasil Disimpan',
+            'idMateri' => $materi[0]->id,
+            'jenisTema' => $materi[0]->jenis_tema,
+            'judulMateri' => $materi[0]->judul_materi,
+            'linkMateri' => $materi[0]->link_materi,
+            'gambarCover' => $materi[0]->gambar_cover,
+            'gambarMateri' => $materi[0]->gambar_materi,
+        ];
+
+        return response()->json($data);
+    }
+
+
+    // Kumpulan Data Untuk Quiz
+    // Data Detail Quiz Untuk Datatables
     public function detailQuiz($idMateri)
     {
         $dataQuiz = DB::table('quiz AS q')
@@ -240,24 +269,7 @@ class MateriController extends Controller
         return view('content/quiz', $data);
     }
 
-    public function showData($id_materi)
-    {
-        $materi = DB::select("select * from materi where id = '$id_materi'");
-
-        $data = [
-            'status' => 200,
-            // 'message' => 'Data Berhasil Disimpan',
-            'idMateri' => $materi[0]->id,
-            'jenisTema' => $materi[0]->jenis_tema,
-            'judulMateri' => $materi[0]->judul_materi,
-            'linkMateri' => $materi[0]->link_materi,
-            'gambarCover' => $materi[0]->gambar_cover,
-            'gambarMateri' => $materi[0]->gambar_materi,
-        ];
-
-        return response()->json($data);
-    }
-
+    // Ambil Data Quiz Untuk Detail Quiz Modal
     public function detailDataQuiz($idQuiz)
     {
         $dataQuiz = DB::table('quiz AS q')
@@ -276,5 +288,61 @@ class MateriController extends Controller
             'imageQuiz' => $dataQuiz[0]->image_quiz,
         ];
         return response()->json($data);
+    }
+
+    // Function Tambah Data Quiz
+    public function createDataQuiz(Request $request)
+    {
+        $data = [
+            'soalQuiz' => $request->soalQuiz,
+            'imageQuiz' => $request->imageQuiz,
+            'idMateri' => $request->idMateri,
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+
+        sleep(2);
+
+        DB::transaction(
+            function () use ($data) {
+                $table1_id = DB::table('quiz')->insertGetId([
+                    'pertanyaan' => $data['soalQuiz'],
+                    'image' => $data['imageQuiz'],
+                    // 'updated_at' => $data['created_at'],
+                ]);
+
+                DB::table('detail_quiz_materi')
+                    ->insert([
+                        'id_quiz' => $table1_id,
+                        'id_materi' => $data['idMateri'],
+                        'created_at' => $data['created_at'],
+                    ]);
+            }
+        );
+
+        $datas = [
+            'status' => 200,
+            'message' => 'Data Berhasil Disimpan',
+            // 'dataIsi' => [
+            //     'soalQuiz' => $data['soalQuiz'],
+            //     'imageQuiz' => $data['imageQuiz'],
+            // ],
+        ];
+
+        return response()->json($datas);
+    }
+
+    // Function Ubah Data Quiz
+    public function updateDataQuiz()
+    {
+    }
+
+    // Function Hapus Data Quiz
+    public function deleteDataQuiz()
+    {
+    }
+
+    // Ambil Data Quiz Untuk Detail Quiz Modal Ubah Dan Hapus
+    public function showDataQuiz()
+    {
     }
 }

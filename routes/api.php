@@ -6,10 +6,9 @@
 // header("Content-Type: application/json; charset=UTF-8");
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\MobileApiController;
 // use Illuminate\Http\Request;
-use App\Http\Controllers\MateriController;
-use App\Http\Controllers\Api\TesController;
-// use App\Http\Controllers\LoginController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,5 +22,5 @@ use App\Http\Controllers\Api\TesController;
 */
 
 // Route::get('/test', [TesController::class, 'index']);
-Route::post('/test', [TesController::class, 'getUsers']);
-Route::post('create', [MateriController::class, 'createData']);
+Route::post('/cekLogin', [MobileApiController::class, 'cekLogin']);
+

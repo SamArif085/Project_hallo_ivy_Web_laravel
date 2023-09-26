@@ -1,4 +1,4 @@
-@extends('layout.detail2Layout')
+@extends('layout.mainLayout')
 @section('content')
     <main id="main" class="main">
 
@@ -19,6 +19,12 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">{{ $cardTitle }}</h5>
+
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                data-bs-target="#addQuiz">
+                                Tambah Quiz
+                            </button>
 
                             <!-- Table with stripped rows -->
                             <table class="table datatable">
@@ -60,7 +66,35 @@
     </main><!-- End #main -->
 
     <!-- Kumpulan Modal -->
-    <!-- Modal Tambah Materi -->
+    <!-- Modal Tambah Quiz -->
+    <div class="modal fade" id="addQuiz" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $modalTitle['tambah'] }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-detail-quiz">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Pertanyaan</label>
+                            <input type="text" class="form-control mb-3" name="perta" id="perta" required>
+                            <label for="exampleFormControlInput1" class="form-label">Link Gambar</label>
+                            <textarea name="imageQuiz" id="imageQuiz" cols="10" rows="2" class="form-control mb-3"></textarea>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger simpan" data-bs-dismiss="modal">Tutup Modal</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ubah Quiz -->
+    <!-- Modal Hapus Quiz -->
+    <!-- Modal Detail Quiz -->
     <div class="modal fade" id="detailQuiz" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
@@ -69,12 +103,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="loading-tambah" style="display: none;">
-                        <button class="btn btn-primary" type="button" disabled>
-                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                            <span role="status">Loading...</span>
-                        </button>
-                    </div>
                     <form id="form-detail-quiz">
                         @csrf
                         <div class="mb-3">
@@ -82,7 +110,6 @@
                             <input type="text" class="form-control mb-3" name="perta" id="perta" required>
                             <label for="exampleFormControlInput1" class="form-label">Link Gambar</label>
                             <textarea name="imageQuiz" id="imageQuiz" cols="10" rows="2" class="form-control mb-3"></textarea>
-                            {{-- <input type="text" class="form-control mb-3" name="imageQuiz" id="imageQuiz" required> --}}
                         </div>
                 </div>
                 <div class="modal-footer">

@@ -10,40 +10,58 @@ use Illuminate\Database\Eloquent\Model;
 // use App\Http\Resources\TestResource;
 use Illuminate\Support\Facades\Auth;
 
-class TesController extends Controller
+class MobileApiController extends Controller
 {
     protected $model;
     public function __construct()
     {
         $this->model = new TestModel();
     }
-    public function getUsers(Request $request)
+    public function cekLogin(Request $request)
     {
         $nisn = $request->input('nisn');
         $password = sha1(md5($request->input('password')));
 
-        $users = $this->model->getUser($nisn, $password);
+        $game = DB::select('SELECT * FROM data_game');
+
+        $tugas = DB::select('SELECT * FROM tugas_rumah');
+
+        $materiUser = DB::select("SELECT m.id, dms.nisn, m.judul_materi, m.link_materi, m.gambar_materi, m.gambar_cover, dpg.id_pesan, pg.isi_pesan, dms.count, dms.status FROM detail_materi_siswa AS dms JOIN materi AS m ON dms.id_materi = m.id JOIN detail_pesan_guru AS dpg ON m.id = dpg.id_tema JOIN pesan_guru AS pg ON pg.id = dpg.id_pesan WHERE dms.nisn = '$nisn'");
+
+        $users = DB::select("SELECT * FROM user_siswa as us LEFT JOIN user_detail_siswa as uds ON us.nisn = uds.nisn JOIN kelas as kls on uds.kode_kelas = kls.kode_kelas JOIN detail_materi_siswa AS dms ON us.nisn = dms.nisn JOIN materi AS m ON dms.id_materi = m.id JOIN jenis_kelamin AS jk ON uds.kode_jen_kel = jk.id JOIN detail_ortu AS do ON uds.id_ortu = do.id WHERE us.nisn = '$nisn' AND us.password = '$password'");
+
+        // $users = $this->model->getUser($nisn, $password);
         if (!empty($users)) {
-            $token = bin2hex(random_bytes(50));
-            $update_token = $this->model->update_token($users->nisn, $token);
-            $data = [
+            $token = bin2hex(random_bytes(20));
+            $update_token = $this->model->update_token($users[0]->nisn, $token);
+            $response = [
                 'status' => true,
+                'statusCode' => 200,
                 'token' => $token,
                 'value' => [
-                    'id' => $users->id,
-                    'nisn_siswa' => $users->nisn,
-                    'nama' => $users->nama,
-                    'kelas' => $users->ket_kelas,
-                    'nama_ortu' => $users->nama_ortu,
-                    'alamat_ortu' => $users->alamat,
-                    'jenis_kelamin' => $users->ket_jen_kelamin,
-                    'judul' => $users->judul_materi,
-                    'link_materi' => $users->link_materi,
-                    // 'materi_user' => $materiUs,
+                    'id' => $users[0]->id,
+                    'nisn_siswa' => $users[0]->nisn,
+                    'nama' => $users[0]->nama,
+                    'kelas' => $users[0]->ket_kelas,
+                    'nama_ortu' => $users[0]->nama_ortu,
+                    'alamat_ortu' => $users[0]->alamat,
+                    'jenis_kelamin' => $users[0]->ket_jen_kelamin,
+                    'judul' => $users[0]->judul_materi,
+                    'link_materi' => $users[0]->link_materi,
+                    'materi_user' => $materiUser,
                 ],
+                'link_game' => $game,
+                'tugas_rumah' => $tugas,
             ];
-            return response()->json($data, 200);
+        } else {
+            $response = array(
+                'status' => false,
+                'statusCode' => 400,
+                'message' => "Don't Find Data",
+            );
         }
+        // $response['statusCode']
+        return response()->json($response);
     }
     public function index()
     {
