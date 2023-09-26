@@ -26,7 +26,7 @@ class MobileApiController extends Controller
 
         $tugas = DB::select('SELECT * FROM tugas_rumah');
 
-        $materiUser = DB::select("SELECT m.id, dms.nisn, m.judul_materi, m.link_materi, m.gambar_materi, m.gambar_cover, dpg.id_pesan, pg.isi_pesan, dms.count, dms.status FROM detail_materi_siswa AS dms JOIN materi AS m ON dms.id_materi = m.id JOIN detail_pesan_guru AS dpg ON m.id = dpg.id_tema JOIN pesan_guru AS pg ON pg.id = dpg.id_pesan WHERE dms.nisn = '$nisn'");
+        $materiUser = DB::select("SELECT m.id, dms.nisn, uds.nama AS namaUser, uds.kode_kelas, m.judul_materi, m.link_materi, m.gambar_materi, m.gambar_cover, dpg.id_pesan, pg.isi_pesan, dms.count, dms.status FROM detail_materi_siswa AS dms JOIN materi AS m ON dms.id_materi = m.id JOIN detail_pesan_guru AS dpg ON m.id = dpg.id_tema JOIN pesan_guru AS pg ON pg.id = dpg.id_pesan JOIN user_detail_siswa AS uds ON uds.nisn = dms.nisn WHERE dms.nisn = '$nisn'");
 
         $users = DB::select("SELECT * FROM user_siswa as us LEFT JOIN user_detail_siswa as uds ON us.nisn = uds.nisn JOIN kelas as kls on uds.kode_kelas = kls.kode_kelas JOIN detail_materi_siswa AS dms ON us.nisn = dms.nisn JOIN materi AS m ON dms.id_materi = m.id JOIN jenis_kelamin AS jk ON uds.kode_jen_kel = jk.id JOIN detail_ortu AS do ON uds.id_ortu = do.id WHERE us.nisn = '$nisn' AND us.password = '$password'");
 
