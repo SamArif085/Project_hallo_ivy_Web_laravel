@@ -130,7 +130,7 @@ class MateriController extends Controller
     public function updateData(Request $request)
     {
         $data = array(
-            'id_materi' => $request->id_materi,
+            'id_materi' => decrypt($request->id_materi),
             'jenis_tema' => $request->jenis_tema,
             'judul_materi' => $request->judul_materi,
             'link_materi' => $request->link_materi,
@@ -139,7 +139,7 @@ class MateriController extends Controller
             'update_at' => date('Y-m-d H:i:s'),
         );
 
-        // var_dump($data);
+        // var_dump($data['id_materi']);
         // die;
 
         sleep(2);
@@ -179,7 +179,7 @@ class MateriController extends Controller
     {
         $data = array(
             'kode_kelas' => decrypt($request->kode_kelas),
-            'id_materi' => $request->id_materi,
+            'id_materi' => decrypt($request->id_materi),
             'jenis_tema' => $request->jenis_tema,
             'judul_materi' => $request->judul_materi,
             'link_materi' => $request->link_materi,
@@ -225,12 +225,13 @@ class MateriController extends Controller
     // Ambil Data Materi Untuk Detail Materi Isi Form Modal Ubah Dan Hapus
     public function showData($id_materi)
     {
-        $materi = DB::select("select * from materi where id = '$id_materi'");
+        $idMateri = decrypt($id_materi);
+        $materi = DB::select("select * from materi where id = '$idMateri'");
 
         $data = [
             'status' => 200,
             // 'message' => 'Data Berhasil Disimpan',
-            'idMateri' => $materi[0]->id,
+            'idMateri' => encrypt($materi[0]->id),
             'jenisTema' => $materi[0]->jenis_tema,
             'judulMateri' => $materi[0]->judul_materi,
             'linkMateri' => $materi[0]->link_materi,
@@ -246,9 +247,15 @@ class MateriController extends Controller
     // Data Detail Quiz Untuk Datatables
     public function detailQuiz($idMateri)
     {
-        $dataQuiz = DB::table('quiz AS q')
-            ->join('detail_quiz_materi AS dqm', 'dqm.id_quiz', '=', 'q.id')
-            ->join('materi AS m', 'm.id', '=', 'dqm.id_materi')
+        // $dataQuiz = DB::table('quiz AS q')
+        //     ->join('detail_quiz_materi AS dqm', 'dqm.id_quiz', '=', 'q.id')
+        //     ->join('materi AS m', 'm.id', '=', 'dqm.id_materi')
+        //     ->select('q.id AS id_quiz', 'q.pertanyaan', 'q.image AS image_quiz')
+        //     ->where('m.id', '=', decrypt($idMateri))
+        //     ->get();
+        $dataQuiz = DB::table('quiz as q')
+            ->join('detail_pert_jawab as dpj', 'q.id', '=', 'dpj.id_perta')
+            ->join('materi AS m', 'm.id', '=', 'dpj.id_materi')
             ->select('q.id AS id_quiz', 'q.pertanyaan', 'q.image AS image_quiz')
             ->where('m.id', '=', decrypt($idMateri))
             ->get();
@@ -265,6 +272,7 @@ class MateriController extends Controller
             'cardTitle' => 'Data Quiz',
             'modalTitle' => $modal,
             'quiz' => $dataQuiz,
+            'idMateri' => $idMateri,
         ];
         return view('content/quiz', $data);
     }
@@ -273,8 +281,8 @@ class MateriController extends Controller
     public function detailDataQuiz($idQuiz)
     {
         $dataQuiz = DB::table('quiz AS q')
-            ->join('detail_quiz_materi AS dqm', 'dqm.id_quiz', '=', 'q.id')
-            ->join('materi AS m', 'm.id', '=', 'dqm.id_materi')
+            ->join('detail_pert_jawab as dpj', 'q.id', '=', 'dpj.id_perta')
+            ->join('materi AS m', 'm.id', '=', 'dpj.id_materi')
             ->select('q.id AS id_quiz', 'q.pertanyaan', 'q.image AS image_quiz')
             ->where('q.id', '=', decrypt($idQuiz))
             ->get();
@@ -283,7 +291,7 @@ class MateriController extends Controller
 
         $data = [
             'status' => 200,
-            'idQuiz' => $dataQuiz[0]->id_quiz,
+            'idQuiz' => encrypt($dataQuiz[0]->id_quiz),
             'perta' => $dataQuiz[0]->pertanyaan,
             'imageQuiz' => $dataQuiz[0]->image_quiz,
         ];
@@ -294,13 +302,14 @@ class MateriController extends Controller
     public function createDataQuiz(Request $request)
     {
         $data = [
-            'soalQuiz' => $request->soalQuiz,
-            'imageQuiz' => $request->imageQuiz,
-            'idMateri' => $request->idMateri,
+            'soalQuiz' => $request->quizTambah,
+            'imageQuiz' => $request->imageQuizTambah,
+            'idMateri' => decrypt($request->idMateriTambahQuiz),
+            'jawab' => $request->jawabTambah,
             'created_at' => date('Y-m-d H:i:s'),
         ];
 
-        sleep(2);
+        // sleep(2);
 
         DB::transaction(
             function () use ($data) {
@@ -310,9 +319,10 @@ class MateriController extends Controller
                     // 'updated_at' => $data['created_at'],
                 ]);
 
-                DB::table('detail_quiz_materi')
+                DB::table('detail_pert_jawab')
                     ->insert([
-                        'id_quiz' => $table1_id,
+                        'id_perta' => $table1_id,
+                        'id_jawab' => $data['jawab'],
                         'id_materi' => $data['idMateri'],
                         'created_at' => $data['created_at'],
                     ]);

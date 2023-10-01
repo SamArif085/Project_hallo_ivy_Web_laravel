@@ -234,8 +234,8 @@ $("#hapus-data").click(function (e) {
             Swal.fire({
                 type: "error",
                 icon: "error",
-                title: `${xhr.status}`,
-                showConfirmButton: false,
+                title: `${xhr.status} <br/> PERINGATAN`,
+                showConfirmButton: true,
                 // location: reload,
                 timer: 1500,
             }).then((result) => location.reload());

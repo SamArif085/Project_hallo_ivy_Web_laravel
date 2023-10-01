@@ -35,3 +35,5 @@ Route::post('/deleteTema', [MateriController::class, 'deleteData'])->name('hapus
 
 Route::get('/detailShow/{id_materi}', [MateriController::class, 'showData'])->middleware('auth');
 Route::get('/detailDataQuiz/{id_quiz}', [MateriController::class, 'detailDataQuiz'])->middleware('auth');
+
+Route::post('/createQuiz', [MateriController::class, 'createDataQuiz'])->middleware('auth');
