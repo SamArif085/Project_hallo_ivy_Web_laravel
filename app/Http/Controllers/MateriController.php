@@ -21,28 +21,20 @@ class MateriController extends Controller
     public function index()
     {
         $idGuru = Auth::user()->id_guru;
+        $kodeKelas = DB::table('detail_guru AS dg')
+            ->join('users AS u', 'u.id_guru', '=', 'dg.id_guru')
+            ->select('dg.id_kel')
+            ->where('dg.id_guru', '=', $idGuru)
+            ->get();
         // $dataMateri = $this->model->getMateri($idGuru);
-        $dataMateri = DB::select('select * from kelas');
+        $dataMateri = DB::table('materi as m')
+            ->select('m.id AS id_materi', 'm.jenis_tema', 'm.judul_materi', 'm.link_materi', 'm.gambar_cover', 'm.gambar_materi', 'm.created_at', 'm.update_at', 'dm.*')
+            ->join('detail_materi as dm', 'dm.id_materi', '=', 'm.id')
+            ->where('dm.kode_kelas', '=', $kodeKelas[0]->id_kel)
+            ->orderBy('m.jenis_tema')
+            ->get();
 
-        $modal = [
-            'materi' => 'Tambah Materi',
-            'quiz' => 'Tambah Quiz',
-        ];
-
-        $data = [
-            'title' => 'Materi',
-            'cardTitle' => 'Data Materi',
-            'modalTitle' => $modal,
-            'materi' => $dataMateri,
-        ];
-        return view('content/materi', $data);
-    }
-
-    // Data Detail Materi Untuk Datatables
-    public function detailData($kode_kel)
-    {
-        $dataMateri = $this->model->getDetail(decrypt($kode_kel));
-        // $dataMateri = $this->model->getDetail($kode_kel);
+        // dd($dataMateri);
 
         $modal = [
             'materi' => 'Tambah Materi',
@@ -55,11 +47,47 @@ class MateriController extends Controller
             'title' => 'Detail Materi',
             'cardTitle' => 'Detail Materi',
             'modalTitle' => $modal,
-            'kodeKelas' => $kode_kel,
+            'kodeKelas' => $kodeKelas,
             'materi' => $dataMateri,
         ];
         return view('content/detailData', $data);
+
+        // $modal = [
+        //     'materi' => 'Tambah Materi',
+        //     'quiz' => 'Tambah Quiz',
+        // ];
+
+        // $data = [
+        //     'title' => 'Materi',
+        //     'cardTitle' => 'Data Materi',
+        //     'modalTitle' => $modal,
+        //     'materi' => $dataMateri,
+        // ];
+        // return view('content/materi', $data);
     }
+
+    // Data Detail Materi Untuk Datatables
+    // public function detailData($kode_kel)
+    // {
+    //     $dataMateri = $this->model->getDetail(decrypt($kode_kel));
+    //     // $dataMateri = $this->model->getDetail($kode_kel);
+
+    //     $modal = [
+    //         'materi' => 'Tambah Materi',
+    //         'quiz' => 'Tambah Quiz',
+    //         'editMateri' => 'Ubah Materi',
+    //         'hapusMateri' => 'Hapus Materi',
+    //     ];
+
+    //     $data = [
+    //         'title' => 'Detail Materi',
+    //         'cardTitle' => 'Detail Materi',
+    //         'modalTitle' => $modal,
+    //         'kodeKelas' => $kode_kel,
+    //         'materi' => $dataMateri,
+    //     ];
+    //     return view('content/detailData', $data);
+    // }
 
     // Function Tambah Data Materi
     public function createData(Request $request)
@@ -283,7 +311,7 @@ class MateriController extends Controller
         $dataQuiz = DB::table('quiz AS q')
             ->join('detail_pert_jawab as dpj', 'q.id', '=', 'dpj.id_perta')
             ->join('materi AS m', 'm.id', '=', 'dpj.id_materi')
-            ->select('q.id AS id_quiz', 'q.pertanyaan', 'q.image AS image_quiz')
+            ->select('q.id AS id_quiz', 'q.pertanyaan', 'q.image AS image_quiz', 'dpj.id_jawab')
             ->where('q.id', '=', decrypt($idQuiz))
             ->get();
 
@@ -294,6 +322,7 @@ class MateriController extends Controller
             'idQuiz' => encrypt($dataQuiz[0]->id_quiz),
             'perta' => $dataQuiz[0]->pertanyaan,
             'imageQuiz' => $dataQuiz[0]->image_quiz,
+            'idJawab' => $dataQuiz[0]->id_jawab,
         ];
         return response()->json($data);
     }
@@ -309,7 +338,7 @@ class MateriController extends Controller
             'created_at' => date('Y-m-d H:i:s'),
         ];
 
-        // sleep(2);
+        sleep(2);
 
         DB::transaction(
             function () use ($data) {
@@ -342,13 +371,69 @@ class MateriController extends Controller
     }
 
     // Function Ubah Data Quiz
-    public function updateDataQuiz()
+    public function updateDataQuiz(Request $request)
     {
+        $data = [
+            'soalQuiz' => $request->quizEdit,
+            'imageQuiz' => $request->imageQuizEdit,
+            'idQuiz' => decrypt($request->idQuizEdit),
+            'jawab' => $request->jawabEditQuiz,
+        ];
+
+        sleep(2);
+
+        DB::transaction(function () use ($data) {
+            DB::table('quiz')
+                ->where('id', '=', $data['idQuiz'])
+                ->update([
+                    'pertanyaan' => $data['soalQuiz'],
+                    'image' => $data['imageQuiz'],
+                ]);
+
+            DB::table('detail_pert_jawab')
+                ->where('id_perta', '=', $data['idQuiz'])
+                ->update([
+                    'id_jawab' => $data['jawab'],
+                ]);
+        });
+
+        $datas = [
+            'status' => 200,
+            'message' => 'Data Berhasil Dirubah',
+        ];
+
+        return response()->json($datas);
     }
 
     // Function Hapus Data Quiz
-    public function deleteDataQuiz()
+    public function deleteDataQuiz(Request $request)
     {
+        $dataHapus = [
+            'idQuiz' => decrypt($request->idQuizHapus),
+            'soalQuiz' => $request->quizHapus,
+            'imageQuiz' => $request->imageQuizHapus,
+            'jawab' => $request->jawabHapusQuiz,
+        ];
+
+        sleep(2);
+
+        DB::transaction(
+            function () use ($dataHapus) {
+                DB::table('detail_pert_jawab')
+                    ->where('id_perta', '=', $dataHapus['idQuiz'])
+                    ->delete();
+                DB::table('quiz')
+                    ->where('id', '=', $dataHapus['idQuiz'])
+                    ->delete();
+            }
+        );
+
+        $datas = [
+            'status' => 200,
+            'message' => 'Data Berhasil Dihapus',
+        ];
+
+        return response()->json($datas);
     }
 
     // Ambil Data Quiz Untuk Detail Quiz Modal Ubah Dan Hapus

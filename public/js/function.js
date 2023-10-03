@@ -4,6 +4,7 @@ $.ajaxSetup({
     },
 });
 
+// Function CRUD Materi
 // Simpan Tambah Data
 $("#simpanTambah").click(function (e) {
     e.preventDefault();
@@ -46,8 +47,6 @@ $("#simpanTambah").click(function (e) {
                     title: `${xhr.status}`,
                     text: "Jenis Tema Harap Diisi !!!",
                     showConfirmButton: true,
-                    // location: reload,
-                    // timer: 1500
                 });
             }
             if (judulTema == "") {
@@ -57,8 +56,6 @@ $("#simpanTambah").click(function (e) {
                     title: `${xhr.status}`,
                     text: "Judul Materi Harap Diisi !!!",
                     showConfirmButton: true,
-                    // location: reload,
-                    // timer: 1500
                 });
             }
             if (linkMat == "") {
@@ -68,8 +65,6 @@ $("#simpanTambah").click(function (e) {
                     title: `${xhr.status}`,
                     text: "Link Materi Harap Diisi !!!",
                     showConfirmButton: true,
-                    // location: reload,
-                    // timer: 1500
                 });
             }
             if (gamCov == "") {
@@ -79,8 +74,6 @@ $("#simpanTambah").click(function (e) {
                     title: `${xhr.status}`,
                     text: "Gambar Cover Harap Diisi !!!",
                     showConfirmButton: true,
-                    // location: reload,
-                    // timer: 1500
                 });
             }
             if (gamMat == "") {
@@ -90,8 +83,6 @@ $("#simpanTambah").click(function (e) {
                     title: `${xhr.status}`,
                     text: "Gambar Tema Harap Diisi !!!",
                     showConfirmButton: true,
-                    // location: reload,
-                    // timer: 1500
                 });
             }
             // Swal.fire({
@@ -239,6 +230,297 @@ $("#hapus-data").click(function (e) {
                 // location: reload,
                 timer: 1500,
             }).then((result) => location.reload());
+        },
+    });
+});
+
+// Function CRUD Quiz
+// Tambah Data
+$("#simpanTamQuiz").on("click", function (e) {
+    e.preventDefault();
+
+    let data = $("#form-tambah-quiz").serialize();
+    let idMateriQuiz = $("#idMateriTambahQuiz").val();
+    let perta = $("#quizTambah").val();
+    let imageQuiz = $("#imageQuizTambah").val();
+    let jawab = $("#jawabTambah").val();
+
+    console.log(data);
+
+    $.ajax({
+        type: "POST",
+        url: "/createQuiz",
+        data: data,
+        dataType: "json",
+        beforeSend: function () {
+            $("#loading-tam-quiz").show();
+            $("#simpanTamQuiz").hide();
+        },
+        success: function (response) {
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Data berhasil ditambahkan",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            $("#form-detail-quiz")[0].reset();
+            $("#addQuiz").modal("hide");
+            location.reload();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            $("#loading-tam-quiz").hide();
+            $("#simpanTamQuiz").show();
+            if (perta == "") {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Pertanyaan Harap Diisi !!!",
+                    showConfirmButton: true,
+                });
+            }
+            if (imageQuiz == "") {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Gambar Harap Diisi !!!",
+                    showConfirmButton: true,
+                });
+            }
+            if (jawab == "") {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Jawaban Harap Diisi !!!",
+                    showConfirmButton: true,
+                });
+            }
+        },
+    });
+});
+// Button Detail Quiz
+$("body").on("click", "#btn-detail-quiz", function () {
+    let id = $(this).data("id");
+    console.log(id);
+
+    $.ajax({
+        type: "GET",
+        url: `/detailDataQuiz/${id}`,
+        // data: "data",
+        // cache: false,
+        beforeSend: function () {
+            // $("#loading-detail-quiz").show();
+            // $("#form-detail-quiz").hide();
+            Swal.fire({
+                position: "center",
+                title: "Proses ambil data . . .",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                // toast: true,
+                html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" > Proses ambil data . . . < /span></div>',
+                timer: 2000,
+            });
+        },
+        success: function (response) {
+            // $('#idQuiz').val(response.idQuiz);
+            $("#pertaDetail").val(response.perta);
+            $("#imageQuizDetail").val(response.imageQuiz);
+            // console.log(pert);
+            $("#detailQuiz").modal("show");
+        },
+    });
+});
+
+// Fungsi Ubah Data Quiz
+$("body").on("click", "#btn-edit-quiz", function () {
+    let id = $(this).data("id");
+    // console.log(id);
+
+    $.ajax({
+        type: "GET",
+        url: `/detailDataQuiz/${id}`,
+        // data: "data",
+        cache: false,
+        beforeSend: function () {
+            // $("#loading-detail-quiz").show();
+            // $("#form-detail-quiz").hide();
+            Swal.fire({
+                position: "center",
+                title: "Proses ambil data . . .",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                // toast: true,
+                html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" ></span></div>',
+                timer: 2000,
+            });
+        },
+        success: function (response) {
+            $("#idQuizEdit").val(response.idQuiz);
+            $("#quizEdit").val(response.perta);
+            $("#imageQuizEdit").val(response.imageQuiz);
+
+            if (response.idJawab == 1) {
+                let jawab =
+                    `<label for="exampleFormControlInput1" class="form-label">Jawaban</label>
+                                    <select class="form-select" name="jawabEditQuiz" id="jawabEditQuiz" aria-label="Default select example">
+                                        <option value="` +
+                    response.idJawab +
+                    `" selected> Betul </option>
+                                        <option value="2"> Salah </option>
+                                    </select>`;
+                $("#formJawabEdit").html(jawab);
+            } else if (response.idJawab == 2) {
+                let jawab =
+                    `<label for="exampleFormControlInput1" class="form-label">Jawaban</label>
+                                    <select class="form-select" name="jawabEditQuiz" id="jawabEditQuiz" aria-label="Default select example">
+                                        <option value="1"> Betul </option>
+                                        <option value="` +
+                    response.idJawab +
+                    `" selected> Salah </option>
+                                    </select>`;
+                $("#formJawabEdit").html(jawab);
+            }
+
+            // console.log(idMateri);
+            $("#editQuiz").modal("show");
+        },
+    });
+});
+$("#simpanEditQuiz").on("click", function (e) {
+    let form = $("#form-edit-quiz").serialize();
+
+    // console.log(form);
+    $.ajax({
+        type: "POST",
+        url: "/updateQuiz",
+        data: form,
+        dataType: "JSON",
+        beforeSend: function () {
+            $("#simpanEditQuiz").hide();
+            $("#loading-edit-quiz").show();
+        }, //menampilkan loading saat mengirimkan data
+        success: function (response) {
+            $("#editQuiz").hide();
+            Swal.fire({
+                type: "success",
+                icon: "success",
+                title: `${response.message}`,
+                showConfirmButton: false,
+                timer: 3000,
+            }).then((result) => location.reload());
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            $("#loading-edit-quiz").hide();
+            $("#simpanEditQuiz").show();
+            Swal.fire({
+                type: "error",
+                icon: "error",
+                title: `${xhr.status}`,
+                showConfirmButton: true,
+                // location: reload,
+                // timer: 1500
+            });
+            // .then((result) =>
+            //     location.reload()
+            // );
+        },
+        // complete function
+        // complete: function() {
+        //     $(".alert").hide();
+        // }
+    });
+});
+
+// Fungsi Hapus Data Quiz
+$("body").on("click", "#btn-hapus-quiz", function () {
+    let id = $(this).data("id");
+    // console.log(id);
+
+    $.ajax({
+        type: "GET",
+        url: `/detailDataQuiz/${id}`,
+        // data: "data",
+        cache: false,
+        beforeSend: function () {
+            Swal.fire({
+                position: "center",
+                title: "Proses ambil data . . .",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" ></span></div>',
+                timer: 2000,
+            });
+        },
+        success: function (response) {
+            $("#idQuizHapus").val(response.idQuiz);
+            $("#quizHapus").val(response.perta);
+            $("#imageQuizHapus").val(response.imageQuiz);
+
+            if (response.idJawab == 1) {
+                let jawab =
+                    `<label for="exampleFormControlInput1" class="form-label">Jawaban</label>
+                                    <select disabled class="form-select" name="jawabHapusQuiz" id="jawabHapusQuiz" aria -
+                                        label="Default select example">
+                                        <option value="` +
+                    respone.idJawab +
+                    `" selected> Betul </option>
+                                        <option value="2"> Salah </option>
+                                    </select>`;
+                $("#formHapusJawabQuiz").html(jawab);
+            }
+            if (response.idJawab == 2) {
+                let jawab =
+                    `<label for="exampleFormControlInput1" class="form-label">Jawaban</label>
+                                    <select disabled class="form-select" name="jawabHapusQuiz" id="jawabHapusQuiz" aria -
+                                        label="Default select example">
+                                        <option value="1"> Betul </option>
+                                        <option value="` +
+                    response.idJawab +
+                    `" selected> Salah </option>
+                                    </select>`;
+                $("#formHapusJawabQuiz").html(jawab);
+            }
+
+            $("#hapusQuiz").modal("show");
+        },
+    });
+});
+$("#simpanHapusQuiz").on("click", function (e) {
+    let form = $("#form-hapus-quiz").serialize();
+
+    $.ajax({
+        type: "POST",
+        url: "/deleteQuiz",
+        data: form,
+        dataType: "JSON",
+        beforeSend: function () {
+            $("#simpanHapusQuiz").hide();
+            $("#loading-hapus-quiz").show();
+        }, //menampilkan loading saat mengirimkan data
+        success: function (response) {
+            $("#hapusQuiz").hide();
+            Swal.fire({
+                type: "success",
+                icon: "success",
+                title: `${response.message}`,
+                showConfirmButton: false,
+                timer: 3000,
+            }).then((result) => location.reload());
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            $("#loading-hapus-quiz").hide();
+            $("#simpanHapusQuiz").show();
+            Swal.fire({
+                type: "error",
+                icon: "error",
+                title: `${xhr.status}`,
+                showConfirmButton: true,
+                location: reload,
+                timer: 1500,
+            });
         },
     });
 });

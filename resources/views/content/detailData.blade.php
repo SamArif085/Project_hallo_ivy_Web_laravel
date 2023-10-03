@@ -48,10 +48,11 @@
                                         <td><?= $row->judul_materi ?></td>
                                         <td>
                                             <a href="javascript:void(0)" id="btn-edit-materi" class="btn btn-warning"
-                                                data-id="{{ encrypt($row->id_materi) }}"><i class="bi bi-pencil-fill"></i></a>
+                                                data-id="{{ encrypt($row->id_materi) }}"><i
+                                                    class="bi bi-pencil-fill"></i></a>
                                             <a href="javascript:void(0)" id="btn-hapus-materi" class="btn btn-danger"
-                                                data-id="{{ encrypt($row->id_materi) }}"><i class="bi bi-trash-fill"></i></a>
-                                            <a href=""></a>
+                                                data-id="{{ encrypt($row->id_materi) }}"><i
+                                                    class="bi bi-trash-fill"></i></a>
                                             <a style="text-decoration-style: none"
                                                 href="{{ route('detQuiz', ['id_materi' => encrypt($row->id_materi)]) }}"
                                                 class="btn btn-primary">
