@@ -47,7 +47,7 @@ class MateriController extends Controller
             'title' => 'Detail Materi',
             'cardTitle' => 'Detail Materi',
             'modalTitle' => $modal,
-            'kodeKelas' => $kodeKelas,
+            'kodeKelas' => encrypt($kodeKelas[0]->id_kel),
             'materi' => $dataMateri,
         ];
         return view('content/detailData', $data);
