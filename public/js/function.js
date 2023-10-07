@@ -112,6 +112,17 @@ $("body").on("click", "#btn-edit-materi", function () {
         url: `/detailShow/${id}`,
         // data: "data",
         // cache: false,
+        beforeSend: function () {
+            Swal.fire({
+                position: "center",
+                title: "Proses ambil data . . .",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                // toast: true,
+                html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" > Proses ambil data . . . < /span></div>',
+                timer: 2000,
+            });
+        },
         success: function (response) {
             $("#idMatEdit").val(response.idMateri);
             $("#jenisTemaEdit").val(response.jenisTema);
@@ -179,8 +190,17 @@ $("body").on("click", "#btn-hapus-materi", function () {
     $.ajax({
         type: "GET",
         url: `/detailShow/${id}`,
-        // data: "data",
-        // cache: false,
+        beforeSend: function () {
+            Swal.fire({
+                position: "center",
+                title: "Proses ambil data . . .",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                // toast: true,
+                html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" > Proses ambil data . . . < /span></div>',
+                timer: 2000,
+            });
+        },
         success: function (response) {
             $("#idMateriHap").val(response.idMateri);
             $("#jenisTemaHap").val(response.jenisTema);
@@ -520,6 +540,279 @@ $("#simpanHapusQuiz").on("click", function (e) {
                 showConfirmButton: true,
                 location: reload,
                 timer: 1500,
+            });
+        },
+    });
+});
+
+// Function CRUD Admin Data Guru
+// Tambah Guru
+$("#simpan-data-guru").on("click", function (e) {
+    e.preventDefault();
+
+    var nama = $("#namaTambahGuru").val();
+    var jenisKelamin = $("#jenisKelaminGuru").val();
+    var kodeKelas = $("#kodeKelasTambahGuru").val();
+    var username = $("#usernameTambahGuru").val();
+    var password = $("#passwordTambahGuru").val();
+
+    var data = $("#form-tambah-guru").serialize();
+    $.ajax({
+        type: "POST",
+        url: "/createGuru",
+        data: data,
+        dataType: "JSON",
+        beforeSend: function () {
+            $("#loading-tambah-guru").show();
+            $("#simpan-data-guru").hide();
+        },
+        success: function (response) {
+            $("#tambahGuru").hide();
+
+            Swal.fire({
+                type: "success",
+                icon: "success",
+                title: `${response.message}`,
+                showConfirmButton: false,
+                timer: 3000,
+            }).then((result) => location.reload());
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            $("#loading-tambah-guru").hide();
+            $("#simpan-data-guru").show();
+
+            if (nama === "") {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Nama Guru Harap Diisi !!!",
+                    showConfirmButton: true,
+                });
+            }
+            if (jenisKelamin === "") {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Jenis Kelamin Guru Harap Dipilih !!!",
+                    showConfirmButton: true,
+                });
+            }
+            if (kodeKelas === "") {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Kelas Guru Harap Dipilih !!!",
+                    showConfirmButton: true,
+                });
+            }
+            if (username === "") {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Username Guru Harap Diisi !!!",
+                    showConfirmButton: true,
+                });
+            }
+            if (password === "") {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Password Guru Harap Diisi !!!",
+                    showConfirmButton: true,
+                });
+            }
+        },
+    });
+});
+
+// Detail Guru
+$("body").on("click", "#btn-detail-guru", function (e) {
+    e.preventDefault();
+
+    let id = $(this).data("id");
+
+    $.ajax({
+        type: "GET",
+        url: `detailGuru/${id}`,
+        // data: "data",
+        // dataType: "dataType",
+        beforeSend: function () {
+            Swal.fire({
+                position: "center",
+                title: "Proses ambil data . . .",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                // toast: true,
+                html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" > Proses ambil data . . . < /span></div>',
+                timer: 2000,
+            });
+        },
+        success: function (response) {
+            $("#namaDetailGuru").val(response.namaGuru);
+            $("#kodeKelasDetailGuru").val(response.kodeKelas);
+            $("#ketKelasDetailGuru").val(response.ketKelas);
+            $("#usernameDetailGuru").val(response.username);
+            // $('#passwordDetailGuru').val(response.password)
+
+            $("#detailGuru").modal("show");
+        },
+    });
+});
+
+// Ubah Guru
+$("body").on("click", "#btn-ubah-guru", function (e) {
+    e.preventDefault();
+
+    let id = $(this).data("id");
+
+    $.ajax({
+        type: "GET",
+        url: `detailGuru/${id}`,
+        // data: "data",
+        // dataType: "dataType",
+        beforeSend: function () {
+            Swal.fire({
+                position: "center",
+                title: "Proses ambil data . . .",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                // toast: true,
+                html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" > Proses ambil data . . . < /span></div>',
+                timer: 2000,
+            });
+        },
+        success: function (response) {
+            $("#idUbahGuru").val(response.idGuru);
+            $("#namaUbahGuru").val(response.namaGuru);
+            $("#ketKodeKelas").val(
+                response.kodeKelas + ` - ` + response.ketKelas
+            );
+            $("#kodeKelasUbahGuruLama").val(response.kodeKelas);
+            // $('#ketKelasDetailGuru').val(response.ketKelas)
+            $("#usernameUbahGuru").val(response.username);
+            $("#jenisKela").val(response.jeKal);
+            $("#jenisKelaUbahGuruLama").val(response.idJeKal);
+            $("#passwordUbahGuruLama").val(response.password);
+
+            $("#ubahGuru").modal("show");
+        },
+    });
+});
+$("#simpan-ubah-guru").on("click", function () {
+    var data = $("#form-ubah-guru").serialize();
+    // console.log(data);
+    $.ajax({
+        type: "POST",
+        url: "/updateGuru",
+        data: data,
+        // dataType: "dataType",
+        beforeSend: function () {
+            $("#loading-ubah-guru").show();
+            $("#simpan-ubah-guru").hide();
+        },
+        success: function (response) {
+            $("#ubahGuru").hide();
+
+            Swal.fire({
+                type: "success",
+                icon: "success",
+                title: `${response.message}`,
+                showConfirmButton: false,
+                timer: 3000,
+            }).then((result) => location.reload());
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            $("#loading-edit").hide();
+            $(".simpanEdit").show();
+            Swal.fire({
+                type: "error",
+                icon: "error",
+                title: `${xhr.status}`,
+                showConfirmButton: true,
+                // location: reload,
+                // timer: 1500
+            });
+        },
+    });
+});
+
+// Hapus Guru
+$("body").on("click", "#btn-hapus-guru", function (e) {
+    e.preventDefault();
+
+    let id = $(this).data("id");
+
+    $.ajax({
+        type: "GET",
+        url: `detailGuru/${id}`,
+        // data: "data",
+        // dataType: "dataType",
+        beforeSend: function () {
+            Swal.fire({
+                position: "center",
+                title: "Proses ambil data . . .",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                // toast: true,
+                html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" > Proses ambil data . . . < /span></div>',
+                timer: 2000,
+            });
+        },
+        success: function (response) {
+            $("#idHapusGuru").val(response.idGuru);
+            $("#namaHapusGuru").val(response.namaGuru);
+            $("#ketKodeKelasHapus").val(
+                response.kodeKelas + ` - ` + response.ketKelas
+            );
+            // $('#kodeKelasUbahGuruLama').val(response.kodeKelas)
+            // $('#ketKelasDetailGuru').val(response.ketKelas)
+            $("#usernameHapusGuru").val(response.username);
+            $("#jenisKelaHapus").val(response.jeKal);
+            // $('#jenisKelaUbahGuruLama').val(response.idJeKal)
+            // $('#passwordUbahGuruLama').val(response.password)
+
+            $("#hapusGuru").modal("show");
+        },
+    });
+});
+$("#simpan-hapus-guru").on("click", function () {
+    var data = $("#form-hapus-guru").serialize();
+    // console.log(data);
+    $.ajax({
+        type: "POST",
+        url: "/deleteGuru",
+        data: data,
+        // dataType: "dataType",
+        beforeSend: function () {
+            $("#loading-hapus-guru").show();
+            $("#simpan-hapus-guru").hide();
+        },
+        success: function (response) {
+            $("#hapusGuru").hide();
+
+            Swal.fire({
+                type: "success",
+                icon: "success",
+                title: `${response.message}`,
+                showConfirmButton: false,
+                timer: 3000,
+            }).then((result) => location.reload());
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            $("#loading-edit").hide();
+            $(".simpanEdit").show();
+            Swal.fire({
+                type: "error",
+                icon: "error",
+                title: `${xhr.status}`,
+                showConfirmButton: true,
+                // location: reload,
+                // timer: 1500
             });
         },
     });
