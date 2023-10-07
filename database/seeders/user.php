@@ -19,8 +19,17 @@ class user extends Seeder
                 'name' => 'Laila Nur Latifa',
                 'username' => 'lailaNur',
                 'password' =>  Hash::make('lailaNur'),
-                'role' => '1',
+                'role' => '2',
                 'id_guru' => '1',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'name' => 'Admin',
+                'username' => 'admin',
+                'password' =>  Hash::make('admin'),
+                'role' => '1',
+                'id_guru' => null,
                 'created_at' => now(),
                 'updated_at' => now()
             ],

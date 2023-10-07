@@ -21,16 +21,16 @@ class MateriController extends Controller
     public function index()
     {
         $idGuru = Auth::user()->id_guru;
-        $kodeKelas = DB::table('detail_guru AS dg')
-            ->join('users AS u', 'u.id_guru', '=', 'dg.id_guru')
-            ->select('dg.id_kel')
-            ->where('dg.id_guru', '=', $idGuru)
+        $kodeKelas = DB::table('data_guru AS dg')
+            ->join('users AS u', 'u.id_guru', '=', 'dg.id')
+            ->select('dg.kode_kelas')
+            ->where('dg.id', '=', $idGuru)
             ->get();
         // $dataMateri = $this->model->getMateri($idGuru);
         $dataMateri = DB::table('materi as m')
             ->select('m.id AS id_materi', 'm.jenis_tema', 'm.judul_materi', 'm.link_materi', 'm.gambar_cover', 'm.gambar_materi', 'm.created_at', 'm.update_at', 'dm.*')
             ->join('detail_materi as dm', 'dm.id_materi', '=', 'm.id')
-            ->where('dm.kode_kelas', '=', $kodeKelas[0]->id_kel)
+            ->where('dm.kode_kelas', '=', $kodeKelas[0]->kode_kelas)
             ->orderBy('m.jenis_tema')
             ->get();
 
@@ -47,7 +47,7 @@ class MateriController extends Controller
             'title' => 'Detail Materi',
             'cardTitle' => 'Detail Materi',
             'modalTitle' => $modal,
-            'kodeKelas' => encrypt($kodeKelas[0]->id_kel),
+            'kodeKelas' => encrypt($kodeKelas[0]->kode_kelas),
             'materi' => $dataMateri,
         ];
         return view('content/detailData', $data);
@@ -255,6 +255,8 @@ class MateriController extends Controller
     {
         $idMateri = decrypt($id_materi);
         $materi = DB::select("select * from materi where id = '$idMateri'");
+
+        sleep(2);
 
         $data = [
             'status' => 200,

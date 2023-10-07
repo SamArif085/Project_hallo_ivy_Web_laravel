@@ -25,6 +25,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($ambilData)) {
             $request->session()->regenerate();
+            
             return redirect()->intended('dashboard');
         }
         return back()->with('error', 'Gagal Login');

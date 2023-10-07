@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Route;
@@ -39,3 +40,9 @@ Route::get('/detailDataQuiz/{id_quiz}', [MateriController::class, 'detailDataQui
 Route::post('/createQuiz', [MateriController::class, 'createDataQuiz'])->name('tambahQuiz')->middleware('auth');
 Route::post('/updateQuiz', [MateriController::class, 'updateDataQuiz'])->name('ubahQuiz')->middleware('auth');
 Route::post('/deleteQuiz', [MateriController::class, 'deleteDataQuiz'])->middleware('auth');
+
+Route::get('dataGuru', [AdminController::class, 'dataGuru'])->name('dataGuru')->middleware('auth');
+Route::post('/createGuru', [AdminController::class, 'createGuru'])->middleware('auth');
+Route::post('/updateGuru', [AdminController::class, 'updateGuru'])->middleware('auth');
+Route::post('/deleteGuru', [AdminController::class, 'deleteGuru'])->middleware('auth');
+Route::get('detailGuru/{id_guru}', [AdminController::class, 'detailGuru'])->middleware('auth');
