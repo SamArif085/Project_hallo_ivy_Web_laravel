@@ -3,8 +3,8 @@
 
     <div class="d-flex align-items-center justify-content-between">
         <a href="{{ route('dashboard') }}" class="logo d-flex justify-content-center">
-            {{-- <img src="" alt=""> --}}
-            <span class="fs-1" style="color: #66E682">HALO-IVY</span>
+            <img src="{{ asset('images/logo-web.jpg') }}" alt="logo-web" class="rounded float-start">
+            <span class="d-none d-lg-block" style="color: #66E682">HALO-IVY</span>
         </a>
         <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
