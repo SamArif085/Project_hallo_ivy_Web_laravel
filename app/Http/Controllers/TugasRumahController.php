@@ -26,14 +26,14 @@ class TugasRumahController extends Controller
         //     ->where('kode_kelas', '=', "$id_kelas")
         //     ->get();
 
-        $id_kelas = DB::select("select * from detail_guru as dg join data_guru as dagu on dagu.id = dg.id_guru where id_guru = '$id_guru'");
+        $id_kelas = DB::select("select * from data_guru where id = '$id_guru'");
 
         // dd((object) $id_kelas[0]->id_kel);
-        $kode_kel = $id_kelas[0]->id_kel;
+        $kode_kel = $id_kelas[0]->kode_kelas;
         $tugas_rumah = DB::select("select * from tugas_rumah where kode_kelas = '$kode_kel'  and status = 'aktif'");
 
         // History
-        $history = DB::select("select * from tugas_rumah where kode_kelas = '$kode_kel' and status = 'unaktif'");
+        $history = DB::select("select * from tugas_rumah where kode_kelas = '$kode_kel' and status = 'selesai'");
 
         // dd($tugas_rumah);
 
