@@ -10,7 +10,70 @@
                     <li class="breadcrumb-item active">Dashboard</li>
                 </ol>
             </nav>
-        </div><!-- End Page Title -->
+        </div>
+        <div class="txt-dashboard">
+            <h2>Selamat Datang Nama Guru</h2>
+        </div>
+        <div class="dashboard-card">
+            <div class="crd-content">
+                <i><img src="{{ asset('images/teacher-9-64.png') }}" alt=""></i>
+                <div class="crd-info">
+                    <p class="item-card">30</p>
+                    <p>Total Guru</p>
+                </div>
+            </div>
+            <div class="crd-content">
+                <i><img width= '80px' src="{{ asset('images/student-management-4-64.png') }}" alt=""></i>
+                <div class="crd-info">
+                    <p class="item-card">30</p>
+                    <p>Total Siswa</p>
+                </div>
+            </div>
+            <div class="crd-content">
+                <i><img src="{{ asset('images/document-135-64.png') }}" alt=""></i>
+                <div class="crd-info">
+                    <p class="item-card">30</p>
+                    <p>Total Materi</p>
+                </div>
+            </div>
+        </div>
+        {{-- <div class="bg-clr">
+            <canvas id="myLineChart"></canvas>
+        </div> --}}
+        {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
+        <script>
+            var labels = ["Jan", "Feb", "Mar", "Apr", "Mei"];
+            var data = [10, 20, 15, 30, 25];
+
+            var ctx = document.getElementById('myLineChart').getContext('2d');
+            var myLineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Video Count',
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)', // latar belakang area
+                        borderColor: 'rgba(75, 192, 192, 1)', // garis
+                        borderWidth: 2,
+                        pointRadius: 5, // Ukuran titik
+                        pointBackgroundColor: 'rgba(75, 192, 192, 1)', // Warna titik
+                        pointBorderColor: 'rgba(75, 192, 192, 1)', // Warna pinggiran titik
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+
+
+        <!-- End Page Title -->
         {{-- <p>{{ Auth::user()->password }}</p> --}}
         {{-- <section class="section dashboard">
             <div class="row">

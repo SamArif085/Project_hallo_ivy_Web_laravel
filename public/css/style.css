@@ -1231,3 +1231,40 @@ h6 {
   font-size: 13px;
   color: #012970;
 }
+
+.bg-clr{
+    background: #fff;
+    width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px 0px rgba(1, 41, 112, 0.1);
+}
+.dashboard-card{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 15px;
+}
+.item-card{
+    font-size: 40px;
+}
+.crd-content{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+    width: 300px;
+    height: 150px;
+    background: #66E682!important;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px 0px rgba(1, 41, 112, 0.1);
+}
+.crd-info{
+    color: #fff;
+}
+.txt-dashboard{
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
