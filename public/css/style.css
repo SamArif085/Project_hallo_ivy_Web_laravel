@@ -1252,12 +1252,13 @@ h6 {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 20px;
+    /* padding: 20px; */
     width: 300px;
     height: 150px;
     background: #66E682!important;
     border-radius: 10px;
     box-shadow: 0px 0px 15px 0px rgba(1, 41, 112, 0.1);
+    margin: 0px 3px 50px 0px;
 }
 .crd-info{
     color: #fff;

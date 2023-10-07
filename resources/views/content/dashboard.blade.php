@@ -12,27 +12,27 @@
             </nav>
         </div>
         <div class="txt-dashboard">
-            <h2>Selamat Datang Nama Guru</h2>
+            <h2>Selamat Datang {{ Auth::user()->name }}</h2>
         </div>
         <div class="dashboard-card">
             <div class="crd-content">
                 <i><img src="{{ asset('images/teacher-9-64.png') }}" alt=""></i>
                 <div class="crd-info">
-                    <p class="item-card">30</p>
+                    <p class="item-card">{{ $count['countGuru'] }}</p>
                     <p>Total Guru</p>
                 </div>
             </div>
             <div class="crd-content">
-                <i><img width= '80px' src="{{ asset('images/student-management-4-64.png') }}" alt=""></i>
+                <i><img width='80px' src="{{ asset('images/student-management-4-64.png') }}" alt=""></i>
                 <div class="crd-info">
-                    <p class="item-card">30</p>
+                    <p class="item-card">{{ $count['countSiswa'] }}</p>
                     <p>Total Siswa</p>
                 </div>
             </div>
             <div class="crd-content">
                 <i><img src="{{ asset('images/document-135-64.png') }}" alt=""></i>
                 <div class="crd-info">
-                    <p class="item-card">30</p>
+                    <p class="item-card">{{ $count['countMateri'] }}</p>
                     <p>Total Materi</p>
                 </div>
             </div>
@@ -41,7 +41,7 @@
             <canvas id="myLineChart"></canvas>
         </div> --}}
         {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
-        <script>
+        {{-- <script>
             var labels = ["Jan", "Feb", "Mar", "Apr", "Mei"];
             var data = [10, 20, 15, 30, 25];
 
@@ -70,7 +70,7 @@
                     }
                 }
             });
-        </script>
+        </script> --}}
 
 
         <!-- End Page Title -->
