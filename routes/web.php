@@ -27,7 +27,6 @@ Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
 Route::get('materi', [MateriController::class, 'index'])->name('materi')->middleware('auth');
 Route::get('detail/{kode_kel}', [MateriController::class, 'detailData'])->name('detail')->middleware('auth');
-Route::get('tugasRumah', [TugasRumahController::class, 'index'])->name('tugas')->middleware('auth');
 Route::get('detailQuiz/{id_materi}', [MateriController::class, 'detailQuiz'])->name('detQuiz')->middleware('auth');
 
 Route::post('/createTema', [MateriController::class, 'createData'])->name('tambahMateri')->middleware('auth');
@@ -46,3 +45,9 @@ Route::post('/createGuru', [AdminController::class, 'createGuru'])->middleware('
 Route::post('/updateGuru', [AdminController::class, 'updateGuru'])->middleware('auth');
 Route::post('/deleteGuru', [AdminController::class, 'deleteGuru'])->middleware('auth');
 Route::get('detailGuru/{id_guru}', [AdminController::class, 'detailGuru'])->middleware('auth');
+
+Route::get('tugasRumah', [TugasRumahController::class, 'index'])->name('tugas')->middleware('auth');
+Route::post('/createTugasRumah', [TugasRumahController::class, 'createDataTugasRumah'])->name('tambahPR')->middleware('auth');
+Route::get('/detailShowPR/{id}', [TugasRumahController::class, 'showDataPR'])->middleware('auth');
+Route::post('/updateDataTugasRumah', [TugasRumahController::class, 'updateTugasRumah'])->middleware('auth');
+Route::post('/deleteDataTugasRumah', [TugasRumahController::class, 'deleteTugasRumah'])->middleware('auth');

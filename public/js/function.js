@@ -817,3 +817,221 @@ $("#simpan-hapus-guru").on("click", function () {
         },
     });
 });
+
+// Function Data Tugas Rumah POST
+
+$("#simpanDataPR").click(function (e) {
+    e.preventDefault();
+
+    let form = $("#form_tambah_PR").serialize();
+    var judulPr = $("#judulPr").val();
+    var deskripsi = $("#deskripsi").val();
+    var status = $("#status").val();
+
+    $.ajax({
+        type: "POST",
+        url: "/createTugasRumah",
+        data: form,
+        dataType: "JSON",
+        beforeSend: function () {
+            $("#simpanDataPR").hide();
+            $("#loading-tambah").show();
+        }, //menampilkan loading saat mengirimkan data
+        success: function (response) {
+            $("#addPR").hide();
+            Swal.fire({
+                type: "success",
+                icon: "success",
+                title: `${response.message}`,
+                showConfirmButton: false,
+                timer: 3000,
+            }).then((result) => location.reload());
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            $("#simpanDataPR").show();
+            $("#loading-tambah").hide();
+            if (judulPr == "") {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Jenis Tema Harap Diisi !!!",
+                    showConfirmButton: true,
+                });
+            }
+            if (deskripsi == "") {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Judul Materi Harap Diisi !!!",
+                    showConfirmButton: true,
+                });
+            }
+            if (status == "") {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Gambar Cover Harap Diisi !!!",
+                    showConfirmButton: true,
+                });
+            }
+        },
+    });
+});
+
+// Function Data Tugas Rumah Edit
+
+$("body").on("click", "#btn-edit-PR", function () {
+    let id = $(this).data("id");
+    // console.log(id);
+
+    $.ajax({
+        type: "GET",
+        url: `/detailShowPR/${id}`,
+        // data: "data",
+        // cache: false,
+        beforeSend: function () {
+            Swal.fire({
+                position: "center",
+                title: "Proses ambil data . . .",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                // toast: true,
+                html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" > Proses ambil data . . . < /span></div>',
+                timer: 2000,
+            });
+        },
+        success: function (response) {
+            $("#idEdit").val(response.id);
+            $("#judulPrEdit").val(response.judulPr);
+            $("#deskripsiEdit").val(response.deskripsi);
+            $("#statusEdit").val(response.status);
+            $("#tenggatEdit").val(response.tenggat);
+            console.log(response);
+            $("#editPR").modal("show");
+        },
+    });
+});
+
+// Function Data Tugas Rumah Edit
+
+$("#editDataPR").click(function (e) {
+    e.preventDefault();
+
+    let form = $("#form-edit-PR").serialize();
+
+    $.ajax({
+        type: "POST",
+        url: "/updateDataTugasRumah",
+        data: form,
+        dataType: "JSON",
+        beforeSend: function () {
+            $(".editDataPR").hide();
+            $("#loading-edit").show();
+        }, //menampilkan loading saat mengirimkan data
+        success: function (response) {
+            $("#editDataPR").hide();
+            Swal.fire({
+                type: "success",
+                icon: "success",
+                title: `${response.message}`,
+                showConfirmButton: false,
+                timer: 3000,
+            }).then((result) => location.reload());
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            $("#loading-edit").hide();
+            $(".editDataPR").show();
+            Swal.fire({
+                type: "error",
+                icon: "error",
+                title: `${xhr.status}`,
+                showConfirmButton: true,
+                // location: reload,
+                // timer: 1500
+            });
+            // .then((result) =>
+            //     location.reload()
+            // );
+        },
+        // complete function
+        // complete: function() {
+        //     $(".alert").hide();
+        // }
+    });
+});
+
+// Function Data Tugas Rumah Hapus
+
+$("body").on("click", "#btn-hapus-PR", function () {
+    let id = $(this).data("id");
+    console.log(id);
+
+    $.ajax({
+        type: "GET",
+        url: `detailShowPR/${id}`,
+        beforeSend: function () {
+            Swal.fire({
+                position: "center",
+                title: "Proses ambil data . . .",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                // toast: true,
+                html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" > Proses ambil data . . . < /span></div>',
+                timer: 2000,
+            });
+        },
+        success: function (response) {
+            $("#idHap").val(response.id);
+            $("#judulPrHap").val(response.judulPr);
+            $("#deskripsiHap").val(response.deskripsi);
+            $("#statusHap").val(response.status);
+            $("#tenggatHap").val(response.tenggat);
+
+            // console.log(idMateri);
+            $("#hapusPR").modal("show");
+        },
+    });
+});
+
+// Function Data Tugas Rumah Hapus
+
+$("#hapusPRData").click(function (e) {
+    e.preventDefault();
+
+    let form = $("#hapusDataPR").serialize();
+    $.ajax({
+        type: "POST",
+        url: "/deleteDataTugasRumah",
+        data: form,
+        dataType: "JSON",
+        beforeSend: function () {
+            $("#hapusPRData").hide();
+            $("#loading-hapus").show();
+        }, //menampilkan loading saat mengirimkan data
+        success: function (response) {
+            $("#hapusPRData").hide();
+            if (response.message) {
+                Swal.fire({
+                    type: "success",
+                    icon: "success",
+                    title: `${response.message}`,
+                    showConfirmButton: false,
+                    timer: 3000,
+                }).then((result) => location.reload());
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            Swal.fire({
+                type: "error",
+                icon: "error",
+                title: `${xhr.status} <br/> PERINGATAN`,
+                showConfirmButton: true,
+                // location: reload,
+                timer: 300000,
+            }).then((result) => location.reload());
+        },
+    });
+});

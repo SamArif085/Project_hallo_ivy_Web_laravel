@@ -21,8 +21,7 @@
                             <h5 class="card-title">{{ $cardTitle }}</h5>
 
                             <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                data-bs-target="#addPR">
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPR">
                                 Tambah
                             </button>
 
@@ -50,10 +49,14 @@
                                         <td><?= $row->tenggat ?></td>
                                         <td><?= $row->status ?></td>
                                         <td>
-                                            <a style="text-decoration-style: none"
-                                                href="{{ route('detail', ['kode_kel' => encrypt($row->id)]) }}"
-                                                class="btn btn-primary">
-                                                <i class="bi bi-info-square"></i>
+                                            <a style="text-decoration-style: none" href="javascript:void(0)"
+                                                class="btn btn-warning" id="btn-edit-PR" data-id="{{ encrypt($row->id) }}">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                            <a style="text-decoration-style: none" href="javascript:void(0)"
+                                                class="btn btn-danger" id="btn-hapus-PR"
+                                                data-id="{{ encrypt($row->id) }}">
+                                                <i class="bi bi-trash-fill"></i>
                                             </a>
                                         </td>
                                     </tr>

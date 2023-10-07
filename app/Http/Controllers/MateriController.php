@@ -38,7 +38,6 @@ class MateriController extends Controller
 
         $modal = [
             'materi' => 'Tambah Materi',
-            'quiz' => 'Tambah Quiz',
             'editMateri' => 'Ubah Materi',
             'hapusMateri' => 'Hapus Materi',
         ];
