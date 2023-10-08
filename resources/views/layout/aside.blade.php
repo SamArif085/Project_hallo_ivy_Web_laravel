@@ -27,8 +27,8 @@
                  </a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link {{ request()->routeIs('dataGuru') ? '' : 'collapsed' }}"
-                     href="{{ route('dataGuru') }}">
+                 <a class="nav-link {{ request()->routeIs('dataSiswa') ? '' : 'collapsed' }}"
+                     href="{{ route('dataSiswa') }}">
                      <i class="bi bi-journal-check"></i>
                      <span>Data Siswa</span>
                  </a>

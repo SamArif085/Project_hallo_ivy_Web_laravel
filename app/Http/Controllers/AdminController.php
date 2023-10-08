@@ -8,6 +8,41 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
+    public function index()
+    {
+
+        // $kodeKelas = DB::table('data_guru AS dg')
+        //     ->join('users AS u', 'u.id_guru', '=', 'dg.id')
+        //     ->select('dg.kode_kelas')
+        //     ->where('dg.id', '=', $idGuru)
+        //     ->get();
+
+        $countGuru = DB::table('data_guru AS dg')
+            ->count();
+
+        $countSiswa = DB::table('user_detail_siswa AS uds')
+            ->count();
+
+        $countMateri = DB::table('detail_materi AS dm')
+            ->count();
+
+
+        $allCount = [
+            'countGuru' => $countGuru,
+            'countSiswa' => $countSiswa,
+            'countMateri' => $countMateri,
+        ];
+
+        $data = [
+            'title' => 'Dashboard Admin',
+            'cardTitle' => 'Dashboard Admin',
+            'count' => $allCount,
+        ];
+
+        return view('content/dashboardAdmin', $data);
+    }
+
+    // Data Guru
     public function dataGuru()
     {
         $dataGuru = DB::table('data_guru AS dg')
@@ -214,5 +249,36 @@ class AdminController extends Controller
         ];
 
         return response()->json($datas);
+    }
+
+
+    // Data Siswa
+    public function dataSiswa()
+    {
+        // $dataSiswa = DB::table('user_detail_siswa AS uds')
+        //     ->join('users AS u', 'u.nisn', '=', 'uds.nisn')
+        //     ->join('kelas AS k', 'k.kode_kelas', '=', 'uds.kode_kelas')
+        //     ->select('uds.nisn', 'uds.nama', 'uds.kode_kelas', 'u.username', 'u.password', 'k.ket_kelas')
+        //     ->get();
+
+        $kode_kelas = DB::table('kelas AS k')
+            ->get();
+
+        $modal = [
+            'tambah' => 'Tambah Data Siswa',
+            'edit' => 'Ubah Data Siswa',
+            'hapus' => 'Hapus Data Siswa',
+            'detail' => 'Detail Data Siswa',
+        ];
+
+        $data = [
+            'title' => 'Data Siswa',
+            'cardTitle' => 'Data Siswa',
+            'modal' => $modal,
+            // 'dataSiswa' => $dataSiswa,
+            'kodeKelas' => $kode_kelas,
+        ];
+
+        return view('content/dataSiswa', $data);
     }
 }

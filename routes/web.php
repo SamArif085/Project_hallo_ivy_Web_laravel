@@ -25,6 +25,7 @@ Route::post('cek', [LoginController::class, 'cekLogin'])->name('cekLogin');
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard')->middleware('auth');
+Route::get('dashboardAdmin', [AdminController::class, 'index'])->name('dashboardAdmin')->middleware('auth');
 Route::get('materi', [MateriController::class, 'index'])->name('materi')->middleware('auth');
 Route::get('detail/{kode_kel}', [MateriController::class, 'detailData'])->name('detail')->middleware('auth');
 Route::get('detailQuiz/{id_materi}', [MateriController::class, 'detailQuiz'])->name('detQuiz')->middleware('auth');
@@ -41,6 +42,12 @@ Route::post('/updateQuiz', [MateriController::class, 'updateDataQuiz'])->name('u
 Route::post('/deleteQuiz', [MateriController::class, 'deleteDataQuiz'])->middleware('auth');
 
 Route::get('dataGuru', [AdminController::class, 'dataGuru'])->name('dataGuru')->middleware('auth');
+Route::post('/createGuru', [AdminController::class, 'createGuru'])->middleware('auth');
+Route::post('/updateGuru', [AdminController::class, 'updateGuru'])->middleware('auth');
+Route::post('/deleteGuru', [AdminController::class, 'deleteGuru'])->middleware('auth');
+Route::get('detailGuru/{id_guru}', [AdminController::class, 'detailGuru'])->middleware('auth');
+
+Route::get('dataSiswa', [AdminController::class, 'dataSiswa'])->name('dataSiswa')->middleware('auth');
 Route::post('/createGuru', [AdminController::class, 'createGuru'])->middleware('auth');
 Route::post('/updateGuru', [AdminController::class, 'updateGuru'])->middleware('auth');
 Route::post('/deleteGuru', [AdminController::class, 'deleteGuru'])->middleware('auth');
