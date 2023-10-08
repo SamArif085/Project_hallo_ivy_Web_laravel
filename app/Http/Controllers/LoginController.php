@@ -25,10 +25,10 @@ class LoginController extends Controller
 
         if (Auth::attempt($ambilData)) {
             $request->session()->regenerate();
-            if (Auth::user()->role === 1) {
+            if (Auth::user()->role === '1') {
                 return redirect()->intended('dashboardAdmin');
             }
-            if (Auth::user()->role === 2) {
+            if (Auth::user()->role === '2') {
                 return redirect()->intended('dashboard');
             }
         }
