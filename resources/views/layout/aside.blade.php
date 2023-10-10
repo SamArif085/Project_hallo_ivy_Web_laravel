@@ -20,8 +20,8 @@
 
          @if (Auth::user()->role == 1)
              <li class="nav-item">
-                 <a class="nav-link {{ request()->routeIs('dataGuru') ? '' : 'collapsed' }}"
-                     href="{{ route('dataGuru') }}">
+                 <a class="nav-link {{ request()->routeIs('dataKelas') ? '' : 'collapsed' }}"
+                     href="{{ route('dataKelas') }}">
                      <i class="bi bi-journal-check"></i>
                      <span>Data Guru</span>
                  </a>

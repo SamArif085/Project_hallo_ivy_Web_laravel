@@ -41,17 +41,18 @@ Route::post('/createQuiz', [MateriController::class, 'createDataQuiz'])->name('t
 Route::post('/updateQuiz', [MateriController::class, 'updateDataQuiz'])->name('ubahQuiz')->middleware('auth');
 Route::post('/deleteQuiz', [MateriController::class, 'deleteDataQuiz'])->middleware('auth');
 
-Route::get('dataGuru', [AdminController::class, 'dataGuru'])->name('dataGuru')->middleware('auth');
+Route::get('dataKelas', [AdminController::class, 'dataKelas'])->name('dataKelas')->middleware('auth');
+Route::get('dataGuru/{kode_kls}', [AdminController::class, 'dataGuru'])->name('dataGuru')->middleware('auth');
 Route::post('/createGuru', [AdminController::class, 'createGuru'])->middleware('auth');
 Route::post('/updateGuru', [AdminController::class, 'updateGuru'])->middleware('auth');
 Route::post('/deleteGuru', [AdminController::class, 'deleteGuru'])->middleware('auth');
-Route::get('detailGuru/{id_guru}', [AdminController::class, 'detailGuru'])->middleware('auth');
+Route::get('/detailGuru/{id_guru}', [AdminController::class, 'detailGuru'])->middleware('auth');
 
 Route::get('dataSiswa', [AdminController::class, 'dataSiswa'])->name('dataSiswa')->middleware('auth');
-Route::post('/createGuru', [AdminController::class, 'createGuru'])->middleware('auth');
-Route::post('/updateGuru', [AdminController::class, 'updateGuru'])->middleware('auth');
-Route::post('/deleteGuru', [AdminController::class, 'deleteGuru'])->middleware('auth');
-Route::get('detailGuru/{id_guru}', [AdminController::class, 'detailGuru'])->middleware('auth');
+Route::post('/createKelas', [AdminController::class, 'createKelas'])->middleware('auth');
+// Route::post('/updateGuru', [AdminController::class, 'updateGuru'])->middleware('auth');
+// Route::post('/deleteGuru', [AdminController::class, 'deleteGuru'])->middleware('auth');
+Route::get('/detailKelas/{kode_kelas}', [AdminController::class, 'showDataKelas'])->middleware('auth');
 
 Route::get('tugasRumah', [TugasRumahController::class, 'index'])->name('tugas')->middleware('auth');
 Route::post('/createTugasRumah', [TugasRumahController::class, 'createDataTugasRumah'])->name('tambahPR')->middleware('auth');

@@ -54,10 +54,10 @@
                                                 id="btn-hapus-guru" class="btn btn-danger">
                                                 <i class="bi bi-trash-fill"></i>
                                             </a>
-                                            <a href="javascript:void(0)" data-id="{{ encrypt($row->id) }}"
+                                            {{-- <a href="javascript:void(0)" data-id="{{ encrypt($row->id) }}"
                                                 id="btn-detail-guru" class="btn btn-primary">
                                                 <i class="bi bi-info-square"></i>
-                                            </a>
+                                            </a> --}}
                                         </td>
                                     </tr>
                                     <?php } ?>

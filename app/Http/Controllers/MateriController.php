@@ -20,24 +20,63 @@ class MateriController extends Controller
     // Data Materi Untuk Datatables
     public function index()
     {
-        $idGuru = Auth::user()->id_guru;
-        $kodeKelas = DB::table('data_guru AS dg')
-            ->join('users AS u', 'u.id_guru', '=', 'dg.id')
-            ->select('dg.kode_kelas')
-            ->where('dg.id', '=', $idGuru)
-            ->get();
+        // $idGuru = Auth::user()->id_guru;
+        // $kodeKelas = DB::table('data_guru AS dg')
+        //     ->join('users AS u', 'u.id_guru', '=', 'dg.id')
+        //     ->select('dg.kode_kelas')
+        //     ->where('dg.id', '=', $idGuru)
+        //     ->get();
         // $dataMateri = $this->model->getMateri($idGuru);
-        $dataMateri = DB::table('materi as m')
-            ->select('m.id AS id_materi', 'm.jenis_tema', 'm.judul_materi', 'm.link_materi', 'm.gambar_cover', 'm.gambar_materi', 'm.created_at', 'm.update_at', 'dm.*')
-            ->join('detail_materi as dm', 'dm.id_materi', '=', 'm.id')
-            ->where('dm.kode_kelas', '=', $kodeKelas[0]->kode_kelas)
-            ->orderBy('m.jenis_tema')
-            ->get();
+        // $dataMateri = DB::table('materi as m')
+        //     ->select('m.id AS id_materi', 'm.jenis_tema', 'm.judul_materi', 'm.link_materi', 'm.gambar_cover', 'm.gambar_materi', 'm.created_at', 'm.update_at', 'dm.*')
+        //     ->join('detail_materi as dm', 'dm.id_materi', '=', 'm.id')
+        //     ->where('dm.kode_kelas', '=', $kodeKelas[0]->kode_kelas)
+        //     ->orderBy('m.jenis_tema')
+        //     ->get();
 
         // dd($dataMateri);
 
+        // $modal = [
+        //     'materi' => 'Tambah Materi',
+        //     'editMateri' => 'Ubah Materi',
+        //     'hapusMateri' => 'Hapus Materi',
+        // ];
+
+        // $data = [
+        //     'title' => 'Detail Materi',
+        //     'cardTitle' => 'Detail Materi',
+        //     'modalTitle' => $modal,
+        //     'kodeKelas' => encrypt($kodeKelas[0]->kode_kelas),
+        //     'materi' => $dataMateri,
+        // ];
+        // return view('content/detailData', $data);
+
+        // $modal = [
+        //     'materi' => 'Tambah Materi',
+        //     'quiz' => 'Tambah Quiz',
+        // ];
+
+        $kelas = DB::table('kelas')
+            ->get();
+
+        $data = [
+            'title' => 'Data Materi',
+            'cardTitle' => 'Data Materi',
+            // 'modalTitle' => $modal,
+            'kelas' => $kelas,
+        ];
+        return view('content/materi', $data);
+    }
+
+    // Data Detail Materi Untuk Datatables
+    public function detailData($kode_kel)
+    {
+        $dataMateri = $this->model->getDetail(decrypt($kode_kel));
+        // $dataMateri = $this->model->getDetail($kode_kel);
+
         $modal = [
             'materi' => 'Tambah Materi',
+            'quiz' => 'Tambah Quiz',
             'editMateri' => 'Ubah Materi',
             'hapusMateri' => 'Hapus Materi',
         ];
@@ -46,47 +85,11 @@ class MateriController extends Controller
             'title' => 'Detail Materi',
             'cardTitle' => 'Detail Materi',
             'modalTitle' => $modal,
-            'kodeKelas' => encrypt($kodeKelas[0]->kode_kelas),
+            'kodeKelas' => $kode_kel,
             'materi' => $dataMateri,
         ];
         return view('content/detailData', $data);
-
-        // $modal = [
-        //     'materi' => 'Tambah Materi',
-        //     'quiz' => 'Tambah Quiz',
-        // ];
-
-        // $data = [
-        //     'title' => 'Materi',
-        //     'cardTitle' => 'Data Materi',
-        //     'modalTitle' => $modal,
-        //     'materi' => $dataMateri,
-        // ];
-        // return view('content/materi', $data);
     }
-
-    // Data Detail Materi Untuk Datatables
-    // public function detailData($kode_kel)
-    // {
-    //     $dataMateri = $this->model->getDetail(decrypt($kode_kel));
-    //     // $dataMateri = $this->model->getDetail($kode_kel);
-
-    //     $modal = [
-    //         'materi' => 'Tambah Materi',
-    //         'quiz' => 'Tambah Quiz',
-    //         'editMateri' => 'Ubah Materi',
-    //         'hapusMateri' => 'Hapus Materi',
-    //     ];
-
-    //     $data = [
-    //         'title' => 'Detail Materi',
-    //         'cardTitle' => 'Detail Materi',
-    //         'modalTitle' => $modal,
-    //         'kodeKelas' => $kode_kel,
-    //         'materi' => $dataMateri,
-    //     ];
-    //     return view('content/detailData', $data);
-    // }
 
     // Function Tambah Data Materi
     public function createData(Request $request)

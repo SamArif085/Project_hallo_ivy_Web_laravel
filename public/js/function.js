@@ -631,38 +631,38 @@ $("#simpan-data-guru").on("click", function (e) {
 });
 
 // Detail Guru
-$("body").on("click", "#btn-detail-guru", function (e) {
-    e.preventDefault();
+// $("body").on("click", "#btn-detail-guru", function (e) {
+//     e.preventDefault();
 
-    let id = $(this).data("id");
+//     let id = $(this).data("id");
 
-    $.ajax({
-        type: "GET",
-        url: `detailGuru/${id}`,
-        // data: "data",
-        // dataType: "dataType",
-        beforeSend: function () {
-            Swal.fire({
-                position: "center",
-                title: "Proses ambil data . . .",
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                // toast: true,
-                html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" > Proses ambil data . . . < /span></div>',
-                timer: 2000,
-            });
-        },
-        success: function (response) {
-            $("#namaDetailGuru").val(response.namaGuru);
-            $("#kodeKelasDetailGuru").val(response.kodeKelas);
-            $("#ketKelasDetailGuru").val(response.ketKelas);
-            $("#usernameDetailGuru").val(response.username);
-            // $('#passwordDetailGuru').val(response.password)
+//     $.ajax({
+//         type: "GET",
+//         url: `/detailGuru/${id}`,
+//         // data: "data",
+//         // dataType: "dataType",
+//         beforeSend: function () {
+//             Swal.fire({
+//                 position: "center",
+//                 title: "Proses ambil data . . .",
+//                 allowOutsideClick: false,
+//                 showConfirmButton: false,
+//                 // toast: true,
+//                 html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" > Proses ambil data . . . < /span></div>',
+//                 timer: 2000,
+//             });
+//         },
+//         success: function (response) {
+//             $("#namaDetailGuru").val(response.namaGuru);
+//             $("#kodeKelasDetailGuru").val(response.kodeKelas);
+//             $("#ketKelasDetailGuru").val(response.ketKelas);
+//             $("#usernameDetailGuru").val(response.username);
+//             // $('#passwordDetailGuru').val(response.password)
 
-            $("#detailGuru").modal("show");
-        },
-    });
-});
+//             $("#detailGuru").modal("show");
+//         },
+//     });
+// });
 
 // Ubah Guru
 $("body").on("click", "#btn-ubah-guru", function (e) {
@@ -672,7 +672,7 @@ $("body").on("click", "#btn-ubah-guru", function (e) {
 
     $.ajax({
         type: "GET",
-        url: `detailGuru/${id}`,
+        url: `/detailGuru/${id}`,
         // data: "data",
         // dataType: "dataType",
         beforeSend: function () {
@@ -749,7 +749,7 @@ $("body").on("click", "#btn-hapus-guru", function (e) {
 
     $.ajax({
         type: "GET",
-        url: `detailGuru/${id}`,
+        url: `/detailGuru/${id}`,
         // data: "data",
         // dataType: "dataType",
         beforeSend: function () {

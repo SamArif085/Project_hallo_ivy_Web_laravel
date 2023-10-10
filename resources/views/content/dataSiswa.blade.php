@@ -31,6 +31,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">No</th>
+                                        <th scope="col">Kode Kelas</th>
                                         <th scope="col">Keterangan Kelas</th>
                                         <th scope="col">Aksi</th>
                                         {{-- <th scope="col">Age</th> --}}
@@ -44,10 +45,11 @@
                                             foreach($kodeKelas as $key => $row) {
                                         ?>
                                         <th>{{ $no++ }}</th>
+                                        <th>{{ $row->kode_kelas }}</th>
                                         <td>{{ $row->ket_kelas }}</td>
                                         <td>
                                             <a href="javascript:void(0)" data-id="{{ encrypt($row->kode_kelas) }}"
-                                                id="btn-ubah-guru" class="btn btn-warning">
+                                                id="btn-ubah-kelas" class="btn btn-warning">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
                                             <a href="javascript:void(0)" data-id="{{ encrypt($row->kode_kelas) }}"
@@ -78,108 +80,148 @@
 
     <!-- Kumpulan Modal -->
     <!-- Modal Tambah Materi -->
-    <div class="modal fade" id="addMateri" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade" id="addKelas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Pengumuman</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $modal['tambah'] }}</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('tambahMateri') }}" method="post">
+                    <form id="form-tambah-kelas">
                         @csrf
                         <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Pilih Kelas</label>
-                            <select class="form-select" id="inputGroupSelect01" name="pilKelas">
-                                <option selected>Pilih Kelas...</option>
-                                <option value="1">Kelas Satu</option>
-                                <option value="2">Kelas Dua</option>
-                                <option value="3">DST</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label">Pilih Materi Yang Akan Di
-                                Upload</label>
-                            <div>
-                                <button type="button" class="btn btn-warning" onclick="text()"><i
-                                        class="bi bi-fonts"></i></button>
-                                <button type="button" class="btn btn-secondary" onclick="gambar()"><i
-                                        class="bi bi-image"></i></button>
-                                <button type="button" class="btn btn-primary" onclick="video()"><i
-                                        class="bi bi-play-btn"></i></button>
+                            <div id="" class="form-text">
+                                <i style="color: red">*</i>
+                                Contoh Kode Kelas : kel-1
                             </div>
+                            <label for="exampleFormControlInput1" class="form-label">Kode Kelas</label>
+                            <input type="text" class="form-control mb-3" name="kodeKelasTambahKelas"
+                                id="kodeKelasTambahKelas" required>
+                            <label for="exampleFormControlInput1" class="form-label">Keterangan Kelas</label>
+                            <input type="text" class="form-control mb-3" name="ketTambahKelas" id="ketTambahKelas"
+                                required>
+                            <label for="exampleFormControlInput1" class="form-label">Gambar Cover Kelas</label>
+                            <input type="text" class="form-control mb-3" name="namaTambahImageKelas"
+                                id="namaTambahImageKelas" required>
                         </div>
-                        <div id="formText">
-                            <!-- Form dinamis akan ditambahkan di sini -->
-                        </div>
-                        <div id="formGambar">
-                            <!-- Form dinamis akan ditambahkan di sini -->
-                        </div>
-                        <div id="formVideo">
-                            <!-- Form dinamis akan ditambahkan di sini -->
-                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
-                    {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> --}}
-                    <button type="submit" class="btn btn-success">Simpan Data</button>
+                    <div id="loading-tambah-kelas" style="display: none;">
+                        <button class="btn btn-primary" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Loading...</span>
+                        </button>
+                    </div>
+                    <button type="submit" class="btn btn-success" id="simpan-kelas">Simpan Data</button>
                 </div>
-                </form>
             </div>
         </div>
     </div>
-    input
-@endsection
-{{-- @section('script')
+
+    <!-- Modal Edit Materi -->
+    <div class="modal fade" id="addKelas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $modal['tambah'] }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-tambah-kelas">
+                        @csrf
+                        <div class="mb-3">
+                            <div id="" class="form-text">
+                                <i style="color: red">*</i>
+                                Contoh Kode Kelas : kel-1
+                            </div>
+                            <label for="exampleFormControlInput1" class="form-label">Kode Kelas</label>
+                            <input type="text" class="form-control mb-3" name="kodeKelasUbahKelas"
+                                id="kodeKelasUbahKelas" required>
+                            <label for="exampleFormControlInput1" class="form-label">Keterangan Kelas</label>
+                            <input type="text" class="form-control mb-3" name="ketUbahKelas" id="ketUbahKelas"
+                                required>
+                            <label for="exampleFormControlInput1" class="form-label">Gambar Cover Kelas</label>
+                            <input type="text" class="form-control mb-3" name="namaUbahImageKelas"
+                                id="namaUbahImageKelas" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div id="loading-ubah-kelas" style="display: none;">
+                        <button class="btn btn-primary" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            <span role="status">Loading...</span>
+                        </button>
+                    </div>
+                    <button type="submit" class="btn btn-success" id="simpan-kelas-ubah">Simpan Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Hapus Materi -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Function Form Text
-        function text() {
-            let data =
-                `<label for="exampleFormControlInput1" class="form-label">Deskripsi</label>
-                <input type="text" class="form-control mb-3" name="text" id="text" required><button type="button" class="btn btn-danger" onclick="hapus()"><i class="bi bi-trash"></i></button>`;
-            // console.log(data);
-            $('#formText').html(data)
-        }
-        // Function Hapus Form Text
-        function hapus() {
-            $('#formText').html('')
-        }
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
 
-        // Fucntion Form Gambar
-        function gambar() {
-            let data =
-                `<label for="exampleFormControlInput1" class="form-label">Upload Gambar</label>
-                <input type="file" class="form-control mb-3" name="text" id="text" required><button type="button" class="btn btn-danger" onclick="hapusGam()"><i class="bi bi-trash"></i></button>`;
-            // console.log(data);
-            $('#formGambar').html(data)
-        }
+        $('#simpan-kelas').on('click', function(e) {
+            e.preventDefault();
 
-        // Function Hapus Form Gambar
-        function hapusGam() {
-            $('#formGambar').html('')
-        }
+            // let data = [];
+            var kodeKelas = $('#kodeKelasTambahKelas').val();
+            var ketKelas = $('#ketTambahKelas').val();
+            var namaImageKelas = $('#namaTambahImageKelas').val();
 
-        // Function Form Video
-        function video() {
-            let data =
-                `<label for="exampleFormControlInput1" class="form-label">Upload Video</label>
-                <input type="file" class="form-control mb-3" name="text" id="text" required><button type="button" class="btn btn-danger" onclick="hapusVid()"><i class="bi bi-trash"></i></button>`;
-            // console.log(data);
-            $('#formVideo').html(data)
-        }
+            let form = $('#form-tambah-kelas').serialize();
 
-        // Function Hapus Form Video
-        function hapusVid() {
-            $('#formVideo').html('')
-        }
-        // error handle
-        function error() {
-            let data =
-                `<div class="alert alert-danger" role="alert">
-                        Error! Data tidak boleh kosong, silahkan isi form
-                    </div>`;
-            // console.log(data);
-            $('#error').html(data)
-        }
-        $(document).ready(() => {})
+            // console.log(form);
+
+            $.ajax({
+                type: "POST",
+                url: "/createKelas",
+                data: form,
+                beforeSend: function() {
+                    $("#loading-tambah-kelas").show();
+                    $("#simpan-kelas").hide();
+                },
+                success: function(response) {
+                    $("#addKelas").hide();
+
+                    Swal.fire({
+                        type: "success",
+                        icon: "success",
+                        title: `${response.message}`,
+                        showConfirmButton: false,
+                        timer: 3000,
+                    }).then((result) => location.reload());
+                },
+            });
+        });
+
+        $('body').on('click', '#btn-ubah-kelas', function() {
+
+            let id = $(this).data('id')
+
+            console.log(id);
+
+            $.ajax({
+                type: "GET",
+                url: "",
+                data: "data",
+                dataType: "dataType",
+                success: function (response) {
+
+                }
+            });
+
+        })
     </script>
-@endsection --}}
+@endsection

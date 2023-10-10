@@ -42,13 +42,29 @@ class AdminController extends Controller
         return view('content/dashboardAdmin', $data);
     }
 
+    // Data Kelas
+    public function dataKelas()
+    {
+        $kelas = DB::table('kelas')
+            ->get();
+
+        $data = [
+            'title' => 'Data Kelas',
+            'cardTitle' => 'Data Kelas',
+            // 'modalTitle' => $modal,
+            'kelas' => $kelas,
+        ];
+        return view('content/kelasAdmin', $data);
+    }
+
     // Data Guru
-    public function dataGuru()
+    public function dataGuru($kode_kls)
     {
         $dataGuru = DB::table('data_guru AS dg')
             ->join('users AS u', 'u.id_guru', '=', 'dg.id')
             ->join('kelas AS k', 'k.kode_kelas', '=', 'dg.kode_kelas')
             ->select('dg.id', 'dg.nama', 'dg.kode_kelas', 'u.username', 'u.password', 'k.ket_kelas')
+            ->where('dg.kode_kelas', '=', decrypt($kode_kls))
             ->get();
 
         $kode_kelas = DB::table('kelas AS k')
@@ -69,6 +85,7 @@ class AdminController extends Controller
             'modal' => $modal,
             'dataGuru' => $dataGuru,
             'kodeKelas' => $kode_kelas,
+            'kd_kls' => $kode_kls,
         ];
 
         return view('content/dataguru', $data);
@@ -79,7 +96,7 @@ class AdminController extends Controller
     {
         $data = [
             'namaGuru' => $request->namaTambahGuru,
-            'kodeKelas' => $request->kodeKelasTambahGuru,
+            'kodeKelas' => decrypt($request->kodeKelasTambahGuru),
             'jenisKelamin' => $request->jenisKelaminGuru,
             'username' => $request->usernameTambahGuru,
             'password' => Hash::make($request->passwordTambahGuru),
@@ -265,20 +282,68 @@ class AdminController extends Controller
             ->get();
 
         $modal = [
-            'tambah' => 'Tambah Data Siswa',
-            'edit' => 'Ubah Data Siswa',
-            'hapus' => 'Hapus Data Siswa',
-            'detail' => 'Detail Data Siswa',
+            'tambah' => 'Tambah Data Kelas',
+            'edit' => 'Ubah Data Kelas',
+            'hapus' => 'Hapus Data Kelas',
+            // 'detail' => 'Detail Data Siswa',
         ];
 
         $data = [
-            'title' => 'Data Siswa',
-            'cardTitle' => 'Data Siswa',
+            'title' => 'Data Kelas',
+            'cardTitle' => 'Data Kelas',
             'modal' => $modal,
             // 'dataSiswa' => $dataSiswa,
             'kodeKelas' => $kode_kelas,
         ];
 
         return view('content/dataSiswa', $data);
+    }
+
+    // Create Kelas
+    public function createKelas(request $request)
+    {
+        $data = [
+            'imageKelas' => $request->namaTambahImageKelas,
+            'kodeKelas' => $request->kodeKelasTambahKelas,
+            'ketKelas' => $request->ketTambahKelas,
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+
+        sleep(2);
+
+        DB::transaction(function () use ($data) {
+            DB::table('kelas')
+                ->insert([
+                    'image' => $data['imageKelas'],
+                    'kode_kelas' => $data['kodeKelas'],
+                    'ket_kelas' => $data['ketKelas'],
+                    'created_at' => $data['created_at'],
+                ]);
+        });
+
+        $datas = [
+            'status' => 200,
+            'message' => 'Data Berhasil Disimpan',
+        ];
+
+        return response()->json($datas);
+    }
+
+    // Show Data Kelas
+    public function showDataKelas($kode_kelas)
+    {
+        $dataKelas = DB::table('kelas AS k')
+            ->where('k.kode_kelas', '=', decrypt($kode_kelas))
+            ->get();
+
+        sleep(2);
+
+        $data = [
+            'imageKelas' => $dataKelas[0]->image,
+            'kodeKelas' => $dataKelas[0]->kode_kelas,
+            'ketKelas' => $dataKelas[0]->ket_kelas,
+        ];
+
+        return response()->json($data);
     }
 }

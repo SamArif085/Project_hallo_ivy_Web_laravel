@@ -13,30 +13,33 @@
                         <label for="exampleFormControlInput1" class="form-label">Nama Guru</label>
                         <input type="text" class="form-control mb-3" name="namaTambahGuru" id="namaTambahGuru"
                             required>
-                        <div class="row">
-                            <div class="col-4">
-                                <label for="exampleFormControlInput1" class="form-label">Jenis Kelamin</label>
-                                <select class="form-select" aria-label="Default select example" name="jenisKelaminGuru"
-                                    id="jenisKelaminGuru">
-                                    <option selected>Pilihan</option>
-                                    <option value="lk">Laki-Laki</option>
-                                    <option value="prp">Perempuan</option>
-                                    {{-- <option value="3">Three</option> --}}
-                                </select>
-                            </div>
-                            <div class="col-8">
-                                <label for="exampleFormControlInput1" class="form-label">Kode Kelas</label>
-                                {{-- <input type="text" class="form-control mb-3" required> --}}
-                                <select class="form-select" aria-label="Default select example"
-                                    name="kodeKelasTambahGuru" id="kodeKelasTambahGuru">
-                                    <option selected>Pilihan</option>
-                                    @foreach ($kodeKelas as $kel => $kelas)
-                                        <option value="{{ $kelas->kode_kelas }}">
-                                            {{ $kelas->kode_kelas }} - {{ $kelas->ket_kelas }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                        <input type="hidden" class="form-control mb-3" name="kodeKelasTambahGuru"
+                            id="kodeKelasTambahGuru" required value="{{ $kd_kls }}">
+                        <div class="">
+                            <label for="exampleFormControlInput1" class="form-label">Jenis Kelamin</label>
+                            <select class="form-select" aria-label="Default select example" name="jenisKelaminGuru"
+                                id="jenisKelaminGuru">
+                                <option selected>Pilihan</option>
+                                <option value="lk">Laki-Laki</option>
+                                <option value="prp">Perempuan</option>
+                                {{-- <option value="3">Three</option> --}}
+                            </select>
                         </div>
+                        {{-- <div class="row">
+
+                            <div class="col-8"> --}}
+                        {{-- <label for="exampleFormControlInput1" class="form-label">Kode Kelas</label> --}}
+                        {{-- <input type="text" class="form-control mb-3" required> --}}
+                        {{-- <select class="form-select" aria-label="Default select example"
+                                    name="kodeKelasTambahGuru" id="kodeKelasTambahGuru">
+                                    <option selected>Pilihan</option> --}}
+                        {{-- @foreach ($kodeKelas as $kel => $kelas) --}}
+                        {{-- <option value="{{ $kelas->kode_kelas }}"> --}}
+                        {{-- {{ $kelas->kode_kelas }} - {{ $kelas->ket_kelas }}</option>
+                                    @endforeach --}}
+                        {{-- </select>
+                            </div> --}}
+                        {{-- </div> --}}
                         <div class="row">
                             <div class="col-6">
                                 <label for="exampleFormControlInput1" class="form-label">Username</label>
