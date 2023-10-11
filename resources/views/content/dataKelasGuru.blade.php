@@ -6,7 +6,7 @@
             <h1>{{ $title }}</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboardAdmin') }}">Dashboard</a></li>
                     <li class="breadcrumb-item">{{ $title }}</li>
                 </ol>
             </nav>

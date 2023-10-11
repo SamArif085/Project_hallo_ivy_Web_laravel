@@ -54,7 +54,7 @@ class AdminController extends Controller
             // 'modalTitle' => $modal,
             'kelas' => $kelas,
         ];
-        return view('content/kelasAdmin', $data);
+        return view('content/kelasGuru', $data);
     }
 
     // Data Guru
@@ -88,7 +88,7 @@ class AdminController extends Controller
             'kd_kls' => $kode_kls,
         ];
 
-        return view('content/dataguru', $data);
+        return view('content/dataKelasguru', $data);
     }
 
     // Create Data Guru
@@ -296,7 +296,7 @@ class AdminController extends Controller
             'kodeKelas' => $kode_kelas,
         ];
 
-        return view('content/dataSiswa', $data);
+        return view('content/dataKelasSiswa', $data);
     }
 
     // Create Kelas
@@ -345,5 +345,36 @@ class AdminController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    // Detail Data Siswa
+    public function detailDataSiswa($kode_kelas)
+    {
+        $dataSiswa = DB::table('user_detail_siswa AS uds')
+            ->join('kelas AS k', 'k.kode_kelas', '=', 'uds.kode_kelas')
+            ->join('user_siswa AS us', 'us.nisn', '=', 'uds.nisn')
+            ->join('detail_ortu AS do', 'do.id', '=', 'uds.id_ortu')
+            ->select('uds.nisn', 'uds.nama', 'uds.kode_kelas', 'us.nisn AS nisn_us', 'us.password', 'k.ket_kelas', 'uds.kode_jen_kel AS jekal')
+            ->where('uds.kode_kelas', '=', decrypt($kode_kelas))
+            ->get();
+
+        // sleep(2);
+
+        $modal = [
+            'tambah' => 'Tambah Data Siswa',
+            'edit' => 'Ubah Data Siswa',
+            'hapus' => 'Hapus Data Siswa',
+            // 'detail' => 'Detail Data Guru',
+        ];
+
+        $data = [
+            'title' => 'Detail Data Siswa',
+            'cardTitle' => 'Detail Data Siswa',
+            'modal' => $modal,
+            'dataSiswa' => $dataSiswa,
+            'kd_kls' => decrypt($kode_kelas),
+        ];
+
+        return view('content/dataDetailSiswa', $data);
     }
 }

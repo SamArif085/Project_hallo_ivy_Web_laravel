@@ -6,7 +6,7 @@
             <h1>{{ $title }}</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboardAdmin') }}">Dashboard</a></li>
                     <li class="breadcrumb-item">{{ $title }}</li>
                 </ol>
             </nav>
@@ -22,8 +22,8 @@
 
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                data-bs-target="#addKelas">
-                                Tambah Kelas
+                                data-bs-target="#addSiswa">
+                                Tambah Siswa
                             </button>
 
                             <!-- Table with stripped rows -->
@@ -31,32 +31,34 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">No</th>
-                                        <th scope="col">Kode Kelas</th>
-                                        <th scope="col">Keterangan Kelas</th>
+                                        <th scope="col">NISN</th>
+                                        <th scope="col">Nama</th>
+                                        <th scope="col">Jenis Kelamin</th>
+                                        <th scope="col">Kelas</th>
                                         <th scope="col">Aksi</th>
-                                        {{-- <th scope="col">Age</th> --}}
-                                        {{-- <th scope="col">Start Date</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <?php
                                             $no = 1;
-                                            foreach($kodeKelas as $key => $row) {
+                                            foreach($dataSiswa as $key => $row) {
                                         ?>
                                         <th>{{ $no++ }}</th>
-                                        <th>{{ $row->kode_kelas }}</th>
+                                        <th>{{ $row->nisn }}</th>
+                                        <td>{{ $row->nama }}</td>
+                                        <td>{{ $row->jekal == 'L' ? 'LAKI-LAKI' : 'PEREMPUAN' }}</td>
                                         <td>{{ $row->ket_kelas }}</td>
                                         <td>
                                             <a href="javascript:void(0)" data-id="{{ encrypt($row->kode_kelas) }}"
                                                 id="btn-ubah-kelas" class="btn btn-warning">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
-                                            <a href="javascript:void(0)" data-id="{{ encrypt($row->kode_kelas) }}"
+                                            {{-- <a href="javascript:void(0)" data-id="{{ encrypt($row->kode_kelas) }}"
                                                 id="btn-hapus-guru" class="btn btn-danger">
                                                 <i class="bi bi-trash-fill"></i>
-                                            </a>
-                                            <a href="javascript:void(0)" data-id="{{ encrypt($row->kode_kelas) }}"
+                                            </a> --}}
+                                            <a href="{{ route('detailDataSiswa', ['kode_kelas' => encrypt($row->kode_kelas)]) }}"
                                                 id="btn-detail-guru" class="btn btn-primary">
                                                 <i class="bi bi-info-square"></i>
                                             </a>
@@ -80,7 +82,7 @@
 
     <!-- Kumpulan Modal -->
     <!-- Modal Tambah Materi -->
-    <div class="modal fade" id="addKelas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addSiswa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
@@ -91,37 +93,63 @@
                     <form id="form-tambah-kelas">
                         @csrf
                         <div class="mb-3">
-                            <div id="" class="form-text">
+                            {{-- <div id="" class="form-text">
                                 <i style="color: red">*</i>
                                 Contoh Kode Kelas : kel-1
+                            </div> --}}
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="exampleFormControlInput1" class="form-label">NISN</label>
+                                    <input type="text" class="form-control mb-3" name="nisnTambah" id="nisnTambah"
+                                        required>
+                                </div>
+                                <div class="col-8">
+                                    <label for="exampleFormControlInput1" class="form-label">Nama Siswa</label>
+                                    <input type="text" class="form-control mb-3" name="namaSisTambah" id="namaSisTambah"
+                                        required>
+                                </div>
                             </div>
-                            <label for="exampleFormControlInput1" class="form-label">Kode Kelas</label>
-                            <input type="text" class="form-control mb-3" name="kodeKelasTambahKelas"
-                                id="kodeKelasTambahKelas" required>
-                            <label for="exampleFormControlInput1" class="form-label">Keterangan Kelas</label>
-                            <input type="text" class="form-control mb-3" name="ketTambahKelas" id="ketTambahKelas"
-                                required>
-                            <label for="exampleFormControlInput1" class="form-label">Gambar Cover Kelas</label>
-                            <input type="text" class="form-control mb-3" name="namaTambahImageKelas"
-                                id="namaTambahImageKelas" required>
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="exampleFormControlInput1" class="form-label">Kelas</label>
+                                    <input type="text" class="form-control mb-3" name="kodeKelTamSiswa"
+                                        id="kodeKelTamSiswa" required value="{{ $kd_kls }}" readonly>
+                                </div>
+                                <div class="col-8">
+                                    <label for="exampleFormControlInput1" class="form-label">Jenis Kelamin</label>
+                                    <select class="form-select" aria-label="Default select example" name="jekelSisTambah"
+                                        id="jekelSisTambah">
+                                        <option value="null" selected>Pilih Jenis Kelamin</option>
+                                        <option value="L">Laki-Laki</option>
+                                        <option value="P">Perempuan</option>
+                                    </select>
+                                </div>
+                            </div>
+                            {{-- <div class="row">
+                                <div class="col-5">
+                                    <label for="exampleFormControlInput1" class="form-label">Password</label>
+                                    <input type="text" class="form-control mb-3" name="passTamSis"
+                                        id="passTamSis" required>
+                                </div>
+                            </div> --}}
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <div id="loading-tambah-kelas" style="display: none;">
+                    <div id="loading-tambah-siswa" style="display: none;">
                         <button class="btn btn-primary" type="button" disabled>
                             <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
                             <span role="status">Loading...</span>
                         </button>
                     </div>
-                    <button type="submit" class="btn btn-success" id="simpan-kelas">Simpan Data</button>
+                    <button type="button" class="btn btn-success" id="simpan-siswa">Simpan Data</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Modal Edit Materi -->
-    <div class="modal fade" id="addKelas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ubahKelas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
@@ -176,9 +204,9 @@
             e.preventDefault();
 
             // let data = [];
-            var kodeKelas = $('#kodeKelasTambahKelas').val();
-            var ketKelas = $('#ketTambahKelas').val();
-            var namaImageKelas = $('#namaTambahImageKelas').val();
+            var nisn = $('#kodeKelasTambahKelas').val();
+            var nama = $('#ketTambahKelas').val();
+            var jekel = $('#namaTambahImageKelas').val();
 
             let form = $('#form-tambah-kelas').serialize();
 
@@ -210,15 +238,30 @@
 
             let id = $(this).data('id')
 
-            console.log(id);
+            // console.log(id);
 
             $.ajax({
                 type: "GET",
-                url: "",
+                url: `/detailKelas/${id}`,
                 data: "data",
-                dataType: "dataType",
-                success: function (response) {
+                // dataType: "dataType",
+                beforeSend: function() {
+                    Swal.fire({
+                        position: "center",
+                        title: "Proses ambil data . . .",
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        // toast: true,
+                        html: '<div class="spinner-grow text-primary" role="status"><span class = "visually-hidden" > Proses ambil data . . . < /span></div>',
+                        timer: 2000,
+                    });
+                },
+                success: function(response) {
+                    $('#kodeKelasUbahKelas').val(response.kodeKelas);
+                    $('#ketUbahKelas').val(response.ketKelas);
+                    $('#namaUbahImageKelas').val(response.imageKelas);
 
+                    $('#ubahKelas').modal('show');
                 }
             });
 

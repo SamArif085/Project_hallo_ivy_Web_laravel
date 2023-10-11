@@ -53,6 +53,7 @@ Route::post('/createKelas', [AdminController::class, 'createKelas'])->middleware
 // Route::post('/updateGuru', [AdminController::class, 'updateGuru'])->middleware('auth');
 // Route::post('/deleteGuru', [AdminController::class, 'deleteGuru'])->middleware('auth');
 Route::get('/detailKelas/{kode_kelas}', [AdminController::class, 'showDataKelas'])->middleware('auth');
+Route::get('detailDataSiswa/{kode_kelas}', [AdminController::class, 'detailDataSiswa'])->name('detailDataSiswa')->middleware('auth');
 
 Route::get('tugasRumah', [TugasRumahController::class, 'index'])->name('tugas')->middleware('auth');
 Route::post('/createTugasRumah', [TugasRumahController::class, 'createDataTugasRumah'])->name('tambahPR')->middleware('auth');

@@ -65,7 +65,7 @@ class MateriController extends Controller
             // 'modalTitle' => $modal,
             'kelas' => $kelas,
         ];
-        return view('content/materi', $data);
+        return view('content/dataKelasMateri', $data);
     }
 
     // Data Detail Materi Untuk Datatables
@@ -88,7 +88,7 @@ class MateriController extends Controller
             'kodeKelas' => $kode_kel,
             'materi' => $dataMateri,
         ];
-        return view('content/detailData', $data);
+        return view('content/detailDataMateri', $data);
     }
 
     // Function Tambah Data Materi
