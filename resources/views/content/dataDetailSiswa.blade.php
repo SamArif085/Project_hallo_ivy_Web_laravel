@@ -50,8 +50,8 @@
                                         <td>{{ $row->jekal == 'L' ? 'LAKI-LAKI' : 'PEREMPUAN' }}</td>
                                         <td>{{ $row->ket_kelas }}</td>
                                         <td>
-                                            <a href="javascript:void(0)" data-id="{{ encrypt($row->kode_kelas) }}"
-                                                id="btn-ubah-kelas" class="btn btn-warning">
+                                            <a href="javascript:void(0)" data-nisn="{{ $row->nisn }}" id="btn-ubah-siswa"
+                                                class="btn btn-warning">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
                                             {{-- <a href="javascript:void(0)" data-id="{{ encrypt($row->kode_kelas) }}"
@@ -90,7 +90,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="form-tambah-kelas">
+                    <form id="form-tambah-siswa">
                         @csrf
                         <div class="mb-3">
                             {{-- <div id="" class="form-text">
@@ -119,7 +119,7 @@
                                     <label for="exampleFormControlInput1" class="form-label">Jenis Kelamin</label>
                                     <select class="form-select" aria-label="Default select example" name="jekelSisTambah"
                                         id="jekelSisTambah">
-                                        <option value="null" selected>Pilih Jenis Kelamin</option>
+                                        <option value="null">Pilih Jenis Kelamin</option>
                                         <option value="L">Laki-Laki</option>
                                         <option value="P">Perempuan</option>
                                     </select>
@@ -149,7 +149,7 @@
     </div>
 
     <!-- Modal Edit Materi -->
-    <div class="modal fade" id="ubahKelas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ubahSiswa" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
@@ -157,22 +157,68 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="form-tambah-kelas">
+                    <form id="form-ubah-siswa">
                         @csrf
                         <div class="mb-3">
-                            <div id="" class="form-text">
+                            {{-- <div id="" class="form-text">
                                 <i style="color: red">*</i>
                                 Contoh Kode Kelas : kel-1
+                            </div> --}}
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="exampleFormControlInput1" class="form-label">NISN</label>
+                                    <input type="text" class="form-control mb-3" name="nisnUbah" id="nisnUbah"
+                                        required>
+                                </div>
+                                <div class="col-8">
+                                    <label for="exampleFormControlInput1" class="form-label">Nama Siswa</label>
+                                    <input type="text" class="form-control mb-3" name="namaSisUbah" id="namaSisUbah"
+                                        required>
+                                </div>
                             </div>
-                            <label for="exampleFormControlInput1" class="form-label">Kode Kelas</label>
-                            <input type="text" class="form-control mb-3" name="kodeKelasUbahKelas"
-                                id="kodeKelasUbahKelas" required>
-                            <label for="exampleFormControlInput1" class="form-label">Keterangan Kelas</label>
-                            <input type="text" class="form-control mb-3" name="ketUbahKelas" id="ketUbahKelas"
-                                required>
-                            <label for="exampleFormControlInput1" class="form-label">Gambar Cover Kelas</label>
-                            <input type="text" class="form-control mb-3" name="namaUbahImageKelas"
-                                id="namaUbahImageKelas" required>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="exampleFormControlInput1" class="form-label">Kelas Lama</label>
+                                    <input type="text" class="form-control mb-3" required
+                                        value="{{ $kd_kls }} - {{ $ketKelas }}" readonly>
+                                    <input type="hidden" class="form-control mb-3" name="kodeKelUbahSiswaLama"
+                                        id="kodeKelUbahSiswaLama" required value="{{ $kd_kls }}" readonly>
+                                </div>
+                                <div class="col-6">
+                                    <label for="exampleFormControlInput1" class="form-label">Jenis Kelamin Lama</label>
+                                    <input type="text" class="form-control mb-3" name="jekelUbahSiswaLama"
+                                        id="jekelUbahSiswaLama" required readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="exampleFormControlInput1" class="form-label">Kelas</label>
+                                    <select class="form-select" aria-label="Default select example"
+                                        name="kodeKelSisUbahBaru" id="kodeKelSisUbahBaru">
+                                        <option value="null">Pilih Kelas Baru</option>
+                                        @foreach ($kodeKelas as $kel => $kelas)
+                                            <option value="{{ $kelas->kode_kelas }}">
+                                                {{ $kelas->kode_kelas }} - {{ $kelas->ket_kelas }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label for="exampleFormControlInput1" class="form-label">Jenis Kelamin</label>
+                                    <select class="form-select" aria-label="Default select example"
+                                        name="jekelSisTambahBaru" id="jekelSisTambahBaru">
+                                        <option value="null">Pilih Jenis Kelamin</option>
+                                        <option value="L">Laki-Laki</option>
+                                        <option value="P">Perempuan</option>
+                                    </select>
+                                </div>
+                            </div>
+                            {{-- <div class="row">
+                                <div class="col-5">
+                                    <label for="exampleFormControlInput1" class="form-label">Password</label>
+                                    <input type="text" class="form-control mb-3" name="passTamSis"
+                                        id="passTamSis" required>
+                                </div>
+                            </div> --}}
                         </div>
                     </form>
                 </div>
@@ -200,28 +246,26 @@
             },
         });
 
-        $('#simpan-kelas').on('click', function(e) {
+        $('#simpan-siswa').on('click', function(e) {
             e.preventDefault();
 
             // let data = [];
-            var nisn = $('#kodeKelasTambahKelas').val();
-            var nama = $('#ketTambahKelas').val();
-            var jekel = $('#namaTambahImageKelas').val();
+            var nisn = $('#nisnTambah').val();
+            var nama = $('#namaSisTambah').val();
+            var jekel = $('#jekelSisTambah').val();
 
-            let form = $('#form-tambah-kelas').serialize();
-
-            // console.log(form);
+            let form = $('#form-tambah-siswa').serialize();
 
             $.ajax({
                 type: "POST",
-                url: "/createKelas",
+                url: "/createSiswa",
                 data: form,
                 beforeSend: function() {
-                    $("#loading-tambah-kelas").show();
-                    $("#simpan-kelas").hide();
+                    $("#loading-tambah-siswa").show();
+                    $("#simpan-siswa").hide();
                 },
                 success: function(response) {
-                    $("#addKelas").hide();
+                    $("#addSiswa").hide();
 
                     Swal.fire({
                         type: "success",
@@ -231,18 +275,50 @@
                         timer: 3000,
                     }).then((result) => location.reload());
                 },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    $("#loading-tambah-siswa").hide();
+                    $("#simpan-siswa").show();
+
+                    if (nisn === "" || nisn === "null") {
+                        Swal.fire({
+                            type: "error",
+                            icon: "error",
+                            title: `${xhr.status}`,
+                            text: "NISN Siswa Harap Diisi !!!",
+                            showConfirmButton: true,
+                        });
+                    }
+                    if (nama === '' || nama === 'null') {
+                        Swal.fire({
+                            type: "error",
+                            icon: "error",
+                            title: `${xhr.status}`,
+                            text: "Nama Siswa Harap Diisi !!!",
+                            showConfirmButton: true,
+                        });
+                    }
+                    if (jekel === '' || jekel === 'null') {
+                        Swal.fire({
+                            type: "error",
+                            icon: "error",
+                            title: `${xhr.status}`,
+                            text: "Jenis Kelamin Siswa Harap Diisi !!!",
+                            showConfirmButton: true,
+                        });
+                    }
+                }
             });
         });
 
-        $('body').on('click', '#btn-ubah-kelas', function() {
+        $('body').on('click', '#btn-ubah-siswa', function() {
 
-            let id = $(this).data('id')
+            let nisn = $(this).data('nisn')
 
             // console.log(id);
 
             $.ajax({
                 type: "GET",
-                url: `/detailKelas/${id}`,
+                url: `/detailSiswa/${nisn}`,
                 data: "data",
                 // dataType: "dataType",
                 beforeSend: function() {
@@ -257,14 +333,47 @@
                     });
                 },
                 success: function(response) {
-                    $('#kodeKelasUbahKelas').val(response.kodeKelas);
-                    $('#ketUbahKelas').val(response.ketKelas);
-                    $('#namaUbahImageKelas').val(response.imageKelas);
+                    $('#nisnUbah').val(response.nisn);
+                    $('#namaSisUbah').val(response.nama);
+                    $('#jekelUbahSiswaLama').val(response.jekal);
+                    // $('#jekelUbahSiswaLama').val(response.imageKelas);
 
-                    $('#ubahKelas').modal('show');
+                    $('#ubahSiswa').modal('show');
                 }
             });
-
         })
+
+        $('#simpan-kelas-ubah').on('click', function(e) {
+            e.preventDefault();
+
+            // let data = [];
+            // var nisn = $('#nisnUbah').val();
+            // var nama = $('#namaSisUbah').val();
+            // var jekel = $('#jekelSisTambahBaru').val();
+            // var kelas = $('#kodeKelSisUbahBaru').val();
+
+            let form = $('#form-ubah-siswa').serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "/updateSiswa",
+                data: form,
+                beforeSend: function() {
+                    $("#loading-ubah-kelas").show();
+                    $("#simpan-kelas-ubah").hide();
+                },
+                success: function(response) {
+                    $("#ubahSiswa").hide();
+
+                    Swal.fire({
+                        type: "success",
+                        icon: "success",
+                        title: `${response.message}`,
+                        showConfirmButton: false,
+                        timer: 3000,
+                    }).then((result) => location.reload());
+                },
+            });
+        });
     </script>
 @endsection

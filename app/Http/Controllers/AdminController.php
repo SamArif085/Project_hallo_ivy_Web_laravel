@@ -353,9 +353,17 @@ class AdminController extends Controller
         $dataSiswa = DB::table('user_detail_siswa AS uds')
             ->join('kelas AS k', 'k.kode_kelas', '=', 'uds.kode_kelas')
             ->join('user_siswa AS us', 'us.nisn', '=', 'uds.nisn')
-            ->join('detail_ortu AS do', 'do.id', '=', 'uds.id_ortu')
+            // ->join('detail_ortu AS do', 'do.id', '=', 'uds.id_ortu')
             ->select('uds.nisn', 'uds.nama', 'uds.kode_kelas', 'us.nisn AS nisn_us', 'us.password', 'k.ket_kelas', 'uds.kode_jen_kel AS jekal')
             ->where('uds.kode_kelas', '=', decrypt($kode_kelas))
+            ->orderBy('uds.nisn', 'ASC')
+            ->get();
+
+        $kodeKelas = DB::table('kelas')
+            ->get();
+        $ketKelas = DB::table('kelas')
+            ->select('ket_kelas')
+            ->where('kode_kelas', '=', decrypt($kode_kelas))
             ->get();
 
         // sleep(2);
@@ -373,8 +381,147 @@ class AdminController extends Controller
             'modal' => $modal,
             'dataSiswa' => $dataSiswa,
             'kd_kls' => decrypt($kode_kelas),
+            'kodeKelas' => $kodeKelas,
+            'ketKelas' => $ketKelas[0]->ket_kelas,
         ];
 
         return view('content/dataDetailSiswa', $data);
+    }
+
+    // Detail Siswa Modal
+    public function detailSiswa($nisn)
+    {
+        $dataSiswa = DB::table('user_detail_siswa AS uds')
+            ->join('kelas AS k', 'k.kode_kelas', '=', 'uds.kode_kelas')
+            ->join('user_siswa AS us', 'us.nisn', '=', 'uds.nisn')
+            // ->join('detail_ortu AS do', 'do.id', '=', 'uds.id_ortu')
+            ->select('uds.nisn', 'uds.nama', 'uds.kode_kelas', 'us.nisn AS nisn_us', 'us.password', 'k.ket_kelas', 'uds.kode_jen_kel AS jekal')
+            ->where('uds.nisn', '=', $nisn)
+            ->get();
+
+        sleep(2);
+
+        if ($dataSiswa[0]->jekal == "P") {
+            $jeKal = "PEREMPUAN";
+        } else {
+            $jeKal = "LAKI-LAKI";
+        }
+
+        $data = [
+            'nisn' => $dataSiswa[0]->nisn,
+            'nama' => $dataSiswa[0]->nama,
+            // 'kodeKelas' => $dataSiswa[0]->kode_kelas,
+            // 'nisn_us' => $dataSiswa[0]->nisn_us,
+            // 'password' => $dataSiswa[0]->password,
+            // 'ketKelas' => $dataSiswa[0]->ket_kelas,
+            'jekal' => $jeKal,
+        ];
+
+        return response()->json($data);
+    }
+
+    // Tambah Siswa
+    public function tambahSiswa(request $request)
+    {
+        $data = [
+            'nisn' => $request->nisnTambah,
+            'nama' => $request->namaSisTambah,
+            'kodeKelas' => $request->kodeKelTamSiswa,
+            'jenisKelamin' => $request->jekelSisTambah,
+            'username' => $request->nisnTambah,
+            'password' => sha1(md5($request->nisnTambah)),
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+
+        sleep(2);
+
+        DB::transaction(function () use ($data) {
+            $idSiswa = DB::table('user_detail_siswa')->insertGetId(
+                [
+                    'nisn' => $data['nisn'],
+                    'nama' => $data['nama'],
+                    'kode_kelas' => $data['kodeKelas'],
+                    'kode_jen_kel' => $data['jenisKelamin'],
+                    'created_at' => $data['created_at'],
+                ]
+            );
+
+            DB::table('user_siswa')
+                ->insert([
+                    'nisn' => $data['nisn'],
+                    'password' => $data['password'],
+                    'created_at' => $data['created_at'],
+                ]);
+        });
+
+        $datas = [
+            'status' => 200,
+            'message' => 'Data Berhasil Disimpan',
+        ];
+
+        return response()->json($datas);
+    }
+
+    // Ubah Siswa
+    public function ubahSiswa(request $request)
+    {
+        $data = [
+            'nisn' => $request->nisnUbah,
+            'nama' => $request->namaSisUbah,
+            'kodeKelasLama' => $request->kodeKelUbahSiswaLama,
+            'kodeKelasBaru' => $request->kodeKelSisUbahBaru,
+            'jenisKelaminLama' => $request->jekelUbahSiswaLama,
+            'jenisKelaminBaru' => $request->jekelSisTambahBaru,
+            'username' => $request->nisnUbah,
+            'password' => sha1(md5($request->nisnUbah)),
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+
+        sleep(2);
+
+        if ($data['jenisKelaminBaru'] === "null" || empty($data['jenisKelaminBaru'])) {
+            $jeKal = $data['jenisKelaminLama'];
+        } else {
+            $jeKal = $data['jenisKelaminBaru'];
+        };
+
+        if ($jeKal === 'LAKI-LAKI') {
+            $jeKal = 'L';
+        } else {
+            $jeKal = 'P';
+        }
+
+        if ($data['kodeKelasBaru'] === "null" || empty($data['kodeKelasBaru'])) {
+            $kodeKelas = $data['kodeKelasLama'];
+        } else {
+            $kodeKelas = $data['kodeKelasBaru'];
+        };
+
+        DB::transaction(function () use ($data, $jeKal, $kodeKelas) {
+            DB::table('user_detail_siswa')
+                ->where('nisn', '=', $data['nisn'])
+                ->update([
+                    'nisn' => $data['nisn'],
+                    'nama' => $data['nama'],
+                    'kode_kelas' => $kodeKelas,
+                    'kode_jen_kel' => $jeKal,
+                    // 'updated_at' => $data['created_at'],
+                ]);
+
+            DB::table('user_siswa')
+                ->where('nisn', '=', $data['nisn'])
+                ->update([
+                    'nisn' => $data['nisn'],
+                    'password' => $data['password'],
+                    // 'updated_at' => $data['created_at'],
+                ]);
+        });
+
+        $datas = [
+            'status' => 200,
+            'message' => 'Data Berhasil Diubah',
+        ];
+
+        return response()->json($datas);
     }
 }
