@@ -77,7 +77,7 @@ class TugasRumahController extends Controller
     public function updateTugasRumah(Request $request)
     {
         $data = array(
-            'id' => decrypt($request->id),
+            'id' => base64_decode($request->id),
             'judulPr' => $request->judulPr,
             'deskripsi' => $request->deskripsi,
             'tenggat' => $request->tenggat,
@@ -117,7 +117,7 @@ class TugasRumahController extends Controller
     {
         $data = array(
 
-            'id' => decrypt($request->id),
+            'id' => base64_decode($request->id),
             'judulPr' => $request->judulPr,
             'deskripsi' => $request->deskripsi,
             'kode_kelas' => $request->kodeKelas,
@@ -150,14 +150,14 @@ class TugasRumahController extends Controller
 
     public function showDataPR($id)
     {
-        $idPR = decrypt($id);
+        $idPR = base64_decode($id);
         $dataPR = DB::select("select * from tugas_rumah where id = '$idPR'");
 
         sleep(2);
 
         $data = [
 
-            'id' => encrypt($dataPR[0]->id),
+            'id' => base64_encode($dataPR[0]->id),
             'judulPr' => $dataPR[0]->judulPr,
             'deskripsi' => $dataPR[0]->deskripsi,
             'tenggat' => $dataPR[0]->tenggat,

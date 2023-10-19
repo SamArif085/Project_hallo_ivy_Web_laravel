@@ -85,15 +85,24 @@ $("#simpanTambah").click(function (e) {
                     showConfirmButton: true,
                 });
             }
-            // Swal.fire({
-            //     type: "error",
-            //     icon: "error",
-            //     title: `${xhr.status}`,
-            //     text: "Semua Bidang Harap Diisi !!!",
-            //     showConfirmButton: true,
-            //     // location: reload,
-            //     // timer: 1500
-            // });
+            // if (xhr.status == 422) {
+            //     var errors = xhr.responseJSON.errors;
+            //     var errorMessage = "";
+
+            //     for (var key in errors) {
+            //         errorMessage += errors[key];
+            //     }
+
+            //     Swal.fire({
+            //         type: "error",
+            //         icon: "error",
+            //         title: `${xhr.status}`,
+            //         text: errorMessage,
+            //         showConfirmButton: true,
+            //         // location: reload,
+            //         // timer: 1500
+            //     });
+            // }
             // .then((result) =>
             //     location.reload()
             // );
@@ -669,10 +678,13 @@ $("body").on("click", "#btn-ubah-guru", function (e) {
     e.preventDefault();
 
     let id = $(this).data("id");
+    let id_deg = $(this).data("id_deg");
+
+    // console.log(id);
 
     $.ajax({
         type: "GET",
-        url: `/detailGuru/${id}`,
+        url: `/detailGuru/${id_deg}`,
         // data: "data",
         // dataType: "dataType",
         beforeSend: function () {
@@ -693,7 +705,7 @@ $("body").on("click", "#btn-ubah-guru", function (e) {
                 response.kodeKelas + ` - ` + response.ketKelas
             );
             $("#kodeKelasUbahGuruLama").val(response.kodeKelas);
-            // $('#ketKelasDetailGuru').val(response.ketKelas)
+            $("#idUbahDetailGuru").val(response.idDetailGuru);
             $("#usernameUbahGuru").val(response.username);
             $("#jenisKela").val(response.jeKal);
             $("#jenisKelaUbahGuruLama").val(response.idJeKal);
@@ -746,10 +758,11 @@ $("body").on("click", "#btn-hapus-guru", function (e) {
     e.preventDefault();
 
     let id = $(this).data("id");
+    let id_deg = $(this).data("id_deg");
 
     $.ajax({
         type: "GET",
-        url: `/detailGuru/${id}`,
+        url: `/detailGuru/${id_deg}`,
         // data: "data",
         // dataType: "dataType",
         beforeSend: function () {
@@ -770,7 +783,7 @@ $("body").on("click", "#btn-hapus-guru", function (e) {
                 response.kodeKelas + ` - ` + response.ketKelas
             );
             // $('#kodeKelasUbahGuruLama').val(response.kodeKelas)
-            // $('#ketKelasDetailGuru').val(response.ketKelas)
+            $("#idHapusDetailGuru").val(response.idDetailGuru);
             $("#usernameHapusGuru").val(response.username);
             $("#jenisKelaHapus").val(response.jeKal);
             // $('#jenisKelaUbahGuruLama').val(response.idJeKal)

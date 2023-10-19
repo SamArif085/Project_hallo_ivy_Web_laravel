@@ -11,22 +11,38 @@ class HomeController extends Controller
     public function index()
     {
         $idGuru = Auth::user()->id_guru;
-        $kodeKelas = DB::table('data_guru AS dg')
-            ->join('users AS u', 'u.id_guru', '=', 'dg.id')
-            ->select('dg.kode_kelas')
-            ->where('dg.id', '=', $idGuru)
+        $kodeKelas = DB::table('detail_guru AS dg')
+            // ->join('users AS u', 'u.id_guru', '=', 'dg.id_guru')
+            // ->select('dg.id_kel')
+            ->where('dg.id_guru', '=', $idGuru)
             ->get();
+        // ->toArray();
 
-        $countGuru = DB::table('data_guru AS dg')
-            ->where('dg.kode_kelas', '=', $kodeKelas[0]->kode_kelas)
+        // var_dump($kodeKelas);
+        // die;
+        // dd($kodeKelas);
+        // $kode_kelas = [];
+        foreach ($kodeKelas as $values) {
+            // dd($values);
+            $kode_kelas[] = $values->id_kel;
+            // dd($kode_kelas);
+        }
+
+        $countGuru = DB::table('detail_guru AS dg')
+            ->whereIn('dg.id_kel', $kode_kelas)
+            ->groupBy('dg.id_guru')
+            // ->count();
             ->count();
 
+        // dd($countGuru);
+
+
         $countSiswa = DB::table('user_detail_siswa AS uds')
-            ->where('uds.kode_kelas', '=', $kodeKelas[0]->kode_kelas)
+            ->whereIn('uds.kode_kelas', $kode_kelas)
             ->count();
 
         $countMateri = DB::table('detail_materi AS dm')
-            ->where('dm.kode_kelas', '=', $kodeKelas[0]->kode_kelas)
+            ->whereIn('dm.kode_kelas', $kode_kelas)
             ->count();
 
         $allCount = [

@@ -48,15 +48,15 @@
                                         <th>{{ $row->kode_kelas }}</th>
                                         <td>{{ $row->ket_kelas }}</td>
                                         <td>
-                                            <a href="javascript:void(0)" data-id="{{ encrypt($row->kode_kelas) }}"
+                                            <a href="javascript:void(0)" data-id="{{ base64_encode($row->kode_kelas) }}"
                                                 id="btn-ubah-kelas" class="btn btn-warning">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
-                                            {{-- <a href="javascript:void(0)" data-id="{{ encrypt($row->kode_kelas) }}"
+                                            {{-- <a href="javascript:void(0)" data-id="{{ base64_encode($row->kode_kelas) }}"
                                                 id="btn-hapus-guru" class="btn btn-danger">
                                                 <i class="bi bi-trash-fill"></i>
                                             </a> --}}
-                                            <a href="{{ route('detailDataSiswa', ['kode_kelas' => encrypt($row->kode_kelas)]) }}"
+                                            <a href="{{ route('detailDataSiswa', ['kode_kelas' => base64_encode($row->kode_kelas)]) }}"
                                                 id="btn-detail-guru" class="btn btn-primary">
                                                 <i class="bi bi-info-square"></i>
                                             </a>
@@ -129,7 +129,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="form-tambah-kelas">
+                    <form id="form-ubah-kelas">
                         @csrf
                         <div class="mb-3">
                             <div id="" class="form-text">
@@ -139,6 +139,8 @@
                             <label for="exampleFormControlInput1" class="form-label">Kode Kelas</label>
                             <input type="text" class="form-control mb-3" name="kodeKelasUbahKelas"
                                 id="kodeKelasUbahKelas" required>
+                            <input type="hidden" class="form-control mb-3" name="kodeKelasUbahKelasLama"
+                                id="kodeKelasUbahKelasLama" required>
                             <label for="exampleFormControlInput1" class="form-label">Keterangan Kelas</label>
                             <input type="text" class="form-control mb-3" name="ketUbahKelas" id="ketUbahKelas"
                                 required>
@@ -230,13 +232,52 @@
                 },
                 success: function(response) {
                     $('#kodeKelasUbahKelas').val(response.kodeKelas);
+                    $('#kodeKelasUbahKelasLama').val(response.kodeKelas);
                     $('#ketUbahKelas').val(response.ketKelas);
                     $('#namaUbahImageKelas').val(response.imageKelas);
 
                     $('#ubahKelas').modal('show');
                 }
             });
+        })
 
+        $('#simpan-kelas-ubah').on('click', function() {
+            let form = $('#form-ubah-kelas').serialize();
+
+            console.log(form);
+
+            $.ajax({
+                type: "POST",
+                url: "/updateKelas",
+                data: form,
+                // dataType: "dataType",
+                beforeSend: function() {
+                    $("#loading-ubah-kelas").show();
+                    $("#simpan-kelas-ubah").hide();
+                },
+                success: function(response) {
+                    $("#ubahKelas").hide();
+                    if (response.message) {
+                        Swal.fire({
+                            type: "success",
+                            icon: "success",
+                            title: `${response.message}`,
+                            showConfirmButton: false,
+                            timer: 3000,
+                        }).then((result) => location.reload());
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    Swal.fire({
+                        type: "error",
+                        icon: "error",
+                        title: `${xhr.status} <br/> PERINGATAN`,
+                        showConfirmButton: true,
+                        // location: reload,
+                        // timer: 300000,
+                    });
+                },
+            });
         })
     </script>
 @endsection

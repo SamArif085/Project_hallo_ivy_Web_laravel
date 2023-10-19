@@ -61,10 +61,10 @@ class AdminController extends Controller
     public function dataGuru($kode_kls)
     {
         $dataGuru = DB::table('data_guru AS dg')
-            ->join('users AS u', 'u.id_guru', '=', 'dg.id')
-            ->join('kelas AS k', 'k.kode_kelas', '=', 'dg.kode_kelas')
-            ->select('dg.id', 'dg.nama', 'dg.kode_kelas', 'u.username', 'u.password', 'k.ket_kelas')
-            ->where('dg.kode_kelas', '=', decrypt($kode_kls))
+            ->join('detail_guru AS deg', 'deg.id_guru', '=', 'dg.id')
+            ->join('kelas AS k', 'k.kode_kelas', '=', 'deg.id_kel')
+            ->select('dg.id', 'dg.nama', 'dg.kode_kelas', 'k.ket_kelas', 'deg.id AS id_deg')
+            ->where('deg.id_kel', '=', base64_decode($kode_kls))
             ->get();
 
         $kode_kelas = DB::table('kelas AS k')
@@ -96,7 +96,7 @@ class AdminController extends Controller
     {
         $data = [
             'namaGuru' => $request->namaTambahGuru,
-            'kodeKelas' => decrypt($request->kodeKelasTambahGuru),
+            'kodeKelas' => base64_decode($request->kodeKelasTambahGuru),
             'jenisKelamin' => $request->jenisKelaminGuru,
             'username' => $request->usernameTambahGuru,
             'password' => Hash::make($request->passwordTambahGuru),
@@ -107,26 +107,55 @@ class AdminController extends Controller
         sleep(2);
 
         DB::transaction(function () use ($data) {
-            $idGuru = DB::table('data_guru')->insertGetId(
-                [
-                    'nama' => $data['namaGuru'],
-                    'kode_kelas' => $data['kodeKelas'],
-                    'jenisKelamin' => $data['jenisKelamin'],
-                    'created_at' => $data['created_at'],
-                    'update_at' => $data['created_at'],
-                ]
-            );
 
-            DB::table('users')
-                ->insert([
-                    'name' => $data['namaGuru'],
-                    'username' => $data['username'],
-                    'password' => $data['password'],
-                    'role' => $data['role'],
-                    'id_guru' => $idGuru,
-                    'created_at' => $data['created_at'],
-                    'updated_at' => $data['created_at'],
-                ]);
+            $guru = DB::table('users AS u')
+                ->where('u.username', '=', $data['username'])
+                ->count();
+
+            if (empty($guru) || $guru === 0) {
+                $idGuru = DB::table('data_guru')->insertGetId(
+                    [
+                        'nama' => $data['namaGuru'],
+                        // 'kode_kelas' => $data['kodeKelas'],
+                        'jenisKelamin' => $data['jenisKelamin'],
+                        'created_at' => $data['created_at'],
+                        'update_at' => $data['created_at'],
+                    ]
+                );
+
+                DB::table('detail_guru')
+                    ->insert([
+                        'id_guru' => $idGuru,
+                        'id_kel' => $data['kodeKelas'],
+                        'created_at' => $data['created_at'],
+                        'update_at' => $data['created_at'],
+                    ]);
+
+                DB::table('users')
+                    ->insert([
+                        'name' => $data['namaGuru'],
+                        'username' => $data['username'],
+                        'password' => $data['password'],
+                        'role' => $data['role'],
+                        'id_guru' => $idGuru,
+                        'created_at' => $data['created_at'],
+                        'updated_at' => $data['created_at'],
+                    ]);
+            } else {
+                $id_guru = DB::table('data_guru AS dg')
+                    ->where('dg.nama', '=', $data['namaGuru'])
+                    ->get();
+
+                // dd($id_guru['id']);
+
+                DB::table('detail_guru')
+                    ->insert([
+                        'id_guru' => $id_guru[0]->id,
+                        'id_kel' => $data['kodeKelas'],
+                        'created_at' => $data['created_at'],
+                        'update_at' => $data['created_at'],
+                    ]);
+            }
         });
 
         $datas = [
@@ -138,27 +167,31 @@ class AdminController extends Controller
     }
 
     // Detail Guru
-    public function detailGuru($id_guru)
+    public function detailGuru($id_deg)
     {
         $dataGuru = DB::table('data_guru AS dg')
             ->join('users AS u', 'u.id_guru', '=', 'dg.id')
-            ->join('kelas AS k', 'k.kode_kelas', '=', 'dg.kode_kelas')
-            ->select('dg.id', 'dg.nama', 'dg.kode_kelas', 'u.username', 'u.password', 'k.ket_kelas', 'dg.jenisKelamin AS jeKal')
-            ->where('dg.id', '=', decrypt($id_guru))
+            ->join('detail_guru AS deg', 'deg.id_guru', '=', 'dg.id')
+            ->join('kelas AS k', 'k.kode_kelas', '=', 'deg.id_kel')
+            ->select('dg.id', 'deg.id AS id_deg', 'dg.nama', 'deg.id_kel', 'u.username', 'u.password', 'k.ket_kelas', 'dg.jenisKelamin AS jeKal')
+            ->where('deg.id', '=', base64_decode($id_deg))
             ->get();
+
+        // var_dump(base64_decode($id_deg));
+        // die;
 
         sleep(2);
 
-        if ($dataGuru[0]->jeKal == "prp") {
+        if ($dataGuru[0]->jeKal === "prp") {
             $jeKal = "Perempuan";
-        }
-        if ($dataGuru[0]->jeKal == "lk") {
+        } else {
             $jeKal = "Laki-Laki";
         }
         $data = [
-            'idGuru' => encrypt($dataGuru[0]->id),
+            'idGuru' => base64_encode($dataGuru[0]->id),
+            'idDetailGuru' => base64_encode($dataGuru[0]->id_deg),
             'namaGuru' => $dataGuru[0]->nama,
-            'kodeKelas' => $dataGuru[0]->kode_kelas,
+            'kodeKelas' => $dataGuru[0]->id_kel,
             'ketKelas' => $dataGuru[0]->ket_kelas,
             'jeKal' => $jeKal,
             'idJeKal' => $dataGuru[0]->jeKal,
@@ -173,7 +206,8 @@ class AdminController extends Controller
     public function updateGuru(request $request)
     {
         $data = [
-            'idGuru' => decrypt($request->idUbahGuru),
+            'idGuru' => base64_decode($request->idUbahGuru),
+            'idDetailGuru' => base64_decode($request->idUbahDetailGuru),
             'namaGuru' => $request->namaUbahGuru,
             'kodeKelasLama' => $request->kodeKelasUbahGuruLama,
             'kodeKelasBaru' => $request->kodeKelasUbahGuruBaru,
@@ -214,13 +248,22 @@ class AdminController extends Controller
                 ->where('id', '=', $data['idGuru'])
                 ->update([
                     'nama' => $data['namaGuru'],
-                    'kode_kelas' => $kodeKelas,
+                    // 'kode_kelas' => $kodeKelas,
                     'jenisKelamin' => $jeKal,
                     'update_at' => $data['updated_at'],
                 ]);
 
+            DB::table('detail_guru')
+                ->where('id', '=', $data['idDetailGuru'])
+                ->update([
+                    'id_guru' => $data['idGuru'],
+                    'id_kel' => $kodeKelas,
+                    // 'created_at' => $data['created_at'],
+                    'update_at' => $data['updated_at'],
+                ]);
+
             DB::table('users')
-                ->where('id_guru', '=', $data['idGuru'])
+                ->where('name', '=', $data['namaGuru'])
                 ->update([
                     'name' => $data['namaGuru'],
                     'username' => $data['username'],
@@ -245,18 +288,23 @@ class AdminController extends Controller
     public function deleteGuru(request $request)
     {
         $data = [
-            'idGuru' => decrypt($request->idHapusGuru),
+            'idGuru' => base64_decode($request->idHapusGuru),
+            'idHapusDetailGuru' => base64_decode($request->idHapusDetailGuru),
         ];
 
         sleep(2);
 
         DB::transaction(function () use ($data) {
-            DB::table('data_guru')
-                ->where('id', '=', $data['idGuru'])
-                ->delete();
+            // DB::table('data_guru')
+            //     ->where('id', '=', $data['idGuru'])
+            //     ->delete();
 
-            DB::table('users')
-                ->where('id_guru', '=', $data['idGuru'])
+            // DB::table('users')
+            //     ->where('id_guru', '=', $data['idGuru'])
+            //     ->delete();
+
+            DB::table('detail_guru')
+                ->where('id', '=', $data['idHapusDetailGuru'])
                 ->delete();
         });
 
@@ -329,11 +377,43 @@ class AdminController extends Controller
         return response()->json($datas);
     }
 
+    // Ubah Kelas
+    public  function updateKelas(Request $request)
+    {
+        $data = [
+            'imageKelas' => $request->namaUbahImageKelas,
+            'kodeKelas' => $request->kodeKelasUbahKelas,
+            'kodeKelasLama' => $request->kodeKelasUbahKelasLama,
+            'ketKelas' => $request->ketUbahKelas,
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+
+        sleep(2);
+
+        DB::transaction(function () use ($data) {
+            DB::table('kelas')
+                ->where('kode_kelas', '=', $data['kodeKelasLama'])
+                ->update([
+                    'image' => $data['imageKelas'],
+                    'kode_kelas' => $data['kodeKelas'],
+                    'ket_kelas' => $data['ketKelas'],
+                    'created_at' => $data['created_at'],
+                ]);
+        });
+
+        $datas = [
+            'status' => 200,
+            'message' => 'Data Berhasil Diubah',
+        ];
+
+        return response()->json($datas);
+    }
+
     // Show Data Kelas
     public function showDataKelas($kode_kelas)
     {
         $dataKelas = DB::table('kelas AS k')
-            ->where('k.kode_kelas', '=', decrypt($kode_kelas))
+            ->where('k.kode_kelas', '=', base64_decode($kode_kelas))
             ->get();
 
         sleep(2);
@@ -355,7 +435,7 @@ class AdminController extends Controller
             ->join('user_siswa AS us', 'us.nisn', '=', 'uds.nisn')
             // ->join('detail_ortu AS do', 'do.id', '=', 'uds.id_ortu')
             ->select('uds.nisn', 'uds.nama', 'uds.kode_kelas', 'us.nisn AS nisn_us', 'us.password', 'k.ket_kelas', 'uds.kode_jen_kel AS jekal')
-            ->where('uds.kode_kelas', '=', decrypt($kode_kelas))
+            ->where('uds.kode_kelas', '=', base64_decode($kode_kelas))
             ->orderBy('uds.nisn', 'ASC')
             ->get();
 
@@ -363,7 +443,7 @@ class AdminController extends Controller
             ->get();
         $ketKelas = DB::table('kelas')
             ->select('ket_kelas')
-            ->where('kode_kelas', '=', decrypt($kode_kelas))
+            ->where('kode_kelas', '=', base64_decode($kode_kelas))
             ->get();
 
         // sleep(2);
@@ -380,7 +460,7 @@ class AdminController extends Controller
             'cardTitle' => 'Detail Data Siswa',
             'modal' => $modal,
             'dataSiswa' => $dataSiswa,
-            'kd_kls' => decrypt($kode_kelas),
+            'kd_kls' => base64_decode($kode_kelas),
             'kodeKelas' => $kodeKelas,
             'ketKelas' => $ketKelas[0]->ket_kelas,
         ];
@@ -485,11 +565,14 @@ class AdminController extends Controller
             $jeKal = $data['jenisKelaminBaru'];
         };
 
-        if ($jeKal === 'LAKI-LAKI') {
-            $jeKal = 'L';
-        } else {
-            $jeKal = 'P';
-        }
+        // if ($jeKal === 'LAKI-LAKI') {
+        //     $jeKal = 'L';
+        // } else {
+        //     $jeKal = 'P';
+        // }
+
+        // var_dump($jeKal);
+        // die;
 
         if ($data['kodeKelasBaru'] === "null" || empty($data['kodeKelasBaru'])) {
             $kodeKelas = $data['kodeKelasLama'];

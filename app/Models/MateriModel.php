@@ -33,4 +33,27 @@ class MateriModel extends Model
             ->orderBy('m.jenis_tema')
             ->get();
     }
+
+    public function updateData()
+    {
+        $pr = DB::table('tugas_rumah')
+            ->get();
+
+        foreach ($pr as $key => $value) {
+            // $data = [
+            //     'date' => date('Y-m-d'),
+            //     'tenggat' => $value->tenggat,
+            // ];
+
+            $date = date('Y-m-d');
+
+            if ($value->tenggat == $date) {
+                DB::table('tugas_rumah')
+                    ->where('id', '=', $value->id)
+                    ->update([
+                        'status' => 'selesai',
+                    ]);
+            }
+        }
+    }
 }

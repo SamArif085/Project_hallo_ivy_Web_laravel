@@ -79,6 +79,7 @@
                     <form id="form-ubah-guru">
                         @csrf
                         <input type="hidden" class="form-control mb-3" name="idUbahGuru" id="idUbahGuru" required>
+                        <input type="hidden" class="form-control mb-3" name="idUbahDetailGuru" id="idUbahDetailGuru" required>
                         <label for="exampleFormControlInput1" class="form-label">Nama Guru</label>
                         <input type="text" class="form-control mb-3" name="namaUbahGuru" id="namaUbahGuru" required>
 
@@ -167,6 +168,8 @@
                     <form id="form-hapus-guru">
                         @csrf
                         <input type="hidden" class="form-control mb-3" name="idHapusGuru" id="idHapusGuru"
+                            required>
+                        <input type="hidden" class="form-control mb-3" name="idHapusDetailGuru" id="idHapusDetailGuru"
                             required>
                         <label for="exampleFormControlInput1" class="form-label">Nama Guru</label>
                         <input type="text" class="form-control mb-3" name="namaHapusGuru" id="namaHapusGuru"

@@ -46,15 +46,15 @@
                                         {{-- <td><?= $row->id_quiz ?></td> --}}
                                         <td>
                                             <a href="javascript:void(0)" class="btn btn-warning" id="btn-edit-quiz"
-                                                data-id="{{ encrypt($row->id_quiz) }}">
+                                                data-id="{{ base64_encode($row->id_quiz) }}">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
                                             <a href="javascript:void(0)" id="btn-hapus-quiz" class="btn btn-danger"
-                                                data-id="{{ encrypt($row->id_quiz) }}">
+                                                data-id="{{ base64_encode($row->id_quiz) }}">
                                                 <i class="bi bi-trash-fill"></i>
                                             </a>
                                             <a href="javascript:void(0)" class="btn btn-primary" id="btn-detail-quiz"
-                                                data-id="{{ encrypt($row->id_quiz) }}">
+                                                data-id="{{ base64_encode($row->id_quiz) }}">
                                                 <i class="bi bi-info-square"></i>
                                             </a>
                                         </td>

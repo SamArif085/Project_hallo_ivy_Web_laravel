@@ -41,7 +41,7 @@
                                         <td><?= $row->ket_kelas ?></td>
                                         <td>
                                             <a style="text-decoration-style: none"
-                                                href="{{ route('dataGuru', ['kode_kls' => encrypt($row->kode_kelas)]) }}"
+                                                href="{{ route('dataGuru', ['kode_kls' => base64_encode($row->kode_kelas)]) }}"
                                                 class="btn btn-primary">
                                                 <i class="bi bi-info-square"></i>
                                             </a>

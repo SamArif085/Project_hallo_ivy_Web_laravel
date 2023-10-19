@@ -50,12 +50,12 @@
                                         <td><?= $row->status ?></td>
                                         <td>
                                             <a style="text-decoration-style: none" href="javascript:void(0)"
-                                                class="btn btn-warning" id="btn-edit-PR" data-id="{{ encrypt($row->id) }}">
+                                                class="btn btn-warning" id="btn-edit-PR" data-id="{{ base64_encode($row->id) }}">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
                                             <a style="text-decoration-style: none" href="javascript:void(0)"
                                                 class="btn btn-danger" id="btn-hapus-PR"
-                                                data-id="{{ encrypt($row->id) }}">
+                                                data-id="{{ base64_encode($row->id) }}">
                                                 <i class="bi bi-trash-fill"></i>
                                             </a>
                                         </td>
@@ -105,7 +105,7 @@
                                         <td><?= $row->status ?></td>
                                         <td>
                                             <a style="text-decoration-style: none"
-                                                href="{{ route('detail', ['kode_kel' => encrypt($row->id)]) }}"
+                                                href="{{ route('detail', ['kode_kel' => base64_encode($row->id)]) }}"
                                                 class="btn btn-primary">
                                                 <i class="bi bi-info-square"></i>
                                             </a>

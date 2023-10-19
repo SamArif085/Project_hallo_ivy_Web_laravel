@@ -26,6 +26,8 @@
                                 Tambah Guru
                             </button>
 
+                            <a href="{{ route('dataKelas') }}" class="btn btn-secondary">Kembali</a>
+
                             <!-- Table with stripped rows -->
                             <table class="table datatable">
                                 <thead>
@@ -46,15 +48,17 @@
                                         <td><?= $row->nama ?></td>
                                         <td><?= $row->ket_kelas ?></td>
                                         <td>
-                                            <a href="javascript:void(0)" data-id="{{ encrypt($row->id) }}"
-                                                id="btn-ubah-guru" class="btn btn-warning">
+                                            <a href="javascript:void(0)" data-id="{{ base64_encode($row->id) }}"
+                                                data-id_deg="{{ base64_encode($row->id_deg) }}" id="btn-ubah-guru"
+                                                class="btn btn-warning">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
-                                            <a href="javascript:void(0)" data-id="{{ encrypt($row->id) }}"
-                                                id="btn-hapus-guru" class="btn btn-danger">
+                                            <a href="javascript:void(0)" data-id="{{ base64_encode($row->id) }}"
+                                                data-id_deg="{{ base64_encode($row->id_deg) }}" id="btn-hapus-guru"
+                                                class="btn btn-danger">
                                                 <i class="bi bi-trash-fill"></i>
                                             </a>
-                                            {{-- <a href="javascript:void(0)" data-id="{{ encrypt($row->id) }}"
+                                            {{-- <a href="javascript:void(0)" data-id="{{ base64_encode($row->id) }}"
                                                 id="btn-detail-guru" class="btn btn-primary">
                                                 <i class="bi bi-info-square"></i>
                                             </a> --}}

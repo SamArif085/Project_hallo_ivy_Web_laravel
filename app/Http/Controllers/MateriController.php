@@ -7,6 +7,7 @@ use App\Models\MateriModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class MateriController extends Controller
 {
@@ -20,7 +21,7 @@ class MateriController extends Controller
     // Data Materi Untuk Datatables
     public function index()
     {
-        // $idGuru = Auth::user()->id_guru;
+        $idGuru = Auth::user()->id_guru;
         // $kodeKelas = DB::table('data_guru AS dg')
         //     ->join('users AS u', 'u.id_guru', '=', 'dg.id')
         //     ->select('dg.kode_kelas')
@@ -46,7 +47,7 @@ class MateriController extends Controller
         //     'title' => 'Detail Materi',
         //     'cardTitle' => 'Detail Materi',
         //     'modalTitle' => $modal,
-        //     'kodeKelas' => encrypt($kodeKelas[0]->kode_kelas),
+        //     'kodeKelas' => base64_encode($kodeKelas[0]->kode_kelas),
         //     'materi' => $dataMateri,
         // ];
         // return view('content/detailData', $data);
@@ -56,7 +57,10 @@ class MateriController extends Controller
         //     'quiz' => 'Tambah Quiz',
         // ];
 
-        $kelas = DB::table('kelas')
+        $kelas = DB::table('kelas AS k')
+            ->join('detail_guru AS dg', 'dg.id_kel', '=', 'k.kode_kelas')
+            ->select('k.kode_kelas', 'k.ket_kelas')
+            ->where('dg.id_guru', '=', $idGuru)
             ->get();
 
         $data = [
@@ -71,7 +75,7 @@ class MateriController extends Controller
     // Data Detail Materi Untuk Datatables
     public function detailData($kode_kel)
     {
-        $dataMateri = $this->model->getDetail(decrypt($kode_kel));
+        $dataMateri = $this->model->getDetail(base64_decode($kode_kel));
         // $dataMateri = $this->model->getDetail($kode_kel);
 
         $modal = [
@@ -94,13 +98,25 @@ class MateriController extends Controller
     // Function Tambah Data Materi
     public function createData(Request $request)
     {
-        $kode_kelas = decrypt($request->kodeKelas);
+        $kode_kelas = base64_decode($request->kodeKelas);
         $jenis_tema = $request->jenisTemaTam;
         $judul_materi = $request->judulMatTam;
         $link_materi = $request->linkMatTam;
         $gambar_cover = $request->gamCovTam;
         $gambar_materi = $request->gamMatTam;
         $created_at = date('Y-m-d H:i:s');
+
+        // $validator = Validator::make($request->all(), [
+        //     'jenisTemaTam' => 'required',
+        //     'judulMatTam' => 'required',
+        //     'linkMatTam' => 'required',
+        //     'gamCovTam' => 'required',
+        //     'gamMatTam' => 'required',
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json(['errors' => $validator->errors()], 422);
+        // }
 
         sleep(1);
 
@@ -160,7 +176,7 @@ class MateriController extends Controller
     public function updateData(Request $request)
     {
         $data = array(
-            'id_materi' => decrypt($request->id_materi),
+            'id_materi' => base64_decode($request->id_materi),
             'jenis_tema' => $request->jenis_tema,
             'judul_materi' => $request->judul_materi,
             'link_materi' => $request->link_materi,
@@ -208,8 +224,8 @@ class MateriController extends Controller
     public function deleteData(Request $request)
     {
         $data = array(
-            'kode_kelas' => decrypt($request->kode_kelas),
-            'id_materi' => decrypt($request->id_materi),
+            'kode_kelas' => base64_decode($request->kode_kelas),
+            'id_materi' => base64_decode($request->id_materi),
             'jenis_tema' => $request->jenis_tema,
             'judul_materi' => $request->judul_materi,
             'link_materi' => $request->link_materi,
@@ -255,7 +271,7 @@ class MateriController extends Controller
     // Ambil Data Materi Untuk Detail Materi Isi Form Modal Ubah Dan Hapus
     public function showData($id_materi)
     {
-        $idMateri = decrypt($id_materi);
+        $idMateri = base64_decode($id_materi);
         $materi = DB::select("select * from materi where id = '$idMateri'");
 
         sleep(2);
@@ -263,7 +279,7 @@ class MateriController extends Controller
         $data = [
             'status' => 200,
             // 'message' => 'Data Berhasil Disimpan',
-            'idMateri' => encrypt($materi[0]->id),
+            'idMateri' => base64_encode($materi[0]->id),
             'jenisTema' => $materi[0]->jenis_tema,
             'judulMateri' => $materi[0]->judul_materi,
             'linkMateri' => $materi[0]->link_materi,
@@ -283,13 +299,13 @@ class MateriController extends Controller
         //     ->join('detail_quiz_materi AS dqm', 'dqm.id_quiz', '=', 'q.id')
         //     ->join('materi AS m', 'm.id', '=', 'dqm.id_materi')
         //     ->select('q.id AS id_quiz', 'q.pertanyaan', 'q.image AS image_quiz')
-        //     ->where('m.id', '=', decrypt($idMateri))
+        //     ->where('m.id', '=', base64_decode($idMateri))
         //     ->get();
         $dataQuiz = DB::table('quiz as q')
             ->join('detail_pert_jawab as dpj', 'q.id', '=', 'dpj.id_perta')
             ->join('materi AS m', 'm.id', '=', 'dpj.id_materi')
             ->select('q.id AS id_quiz', 'q.pertanyaan', 'q.image AS image_quiz')
-            ->where('m.id', '=', decrypt($idMateri))
+            ->where('m.id', '=', base64_decode($idMateri))
             ->get();
 
         $modal = [
@@ -316,14 +332,14 @@ class MateriController extends Controller
             ->join('detail_pert_jawab as dpj', 'q.id', '=', 'dpj.id_perta')
             ->join('materi AS m', 'm.id', '=', 'dpj.id_materi')
             ->select('q.id AS id_quiz', 'q.pertanyaan', 'q.image AS image_quiz', 'dpj.id_jawab')
-            ->where('q.id', '=', decrypt($idQuiz))
+            ->where('q.id', '=', base64_decode($idQuiz))
             ->get();
 
         sleep(2);
 
         $data = [
             'status' => 200,
-            'idQuiz' => encrypt($dataQuiz[0]->id_quiz),
+            'idQuiz' => base64_encode($dataQuiz[0]->id_quiz),
             'perta' => $dataQuiz[0]->pertanyaan,
             'imageQuiz' => $dataQuiz[0]->image_quiz,
             'idJawab' => $dataQuiz[0]->id_jawab,
@@ -337,7 +353,7 @@ class MateriController extends Controller
         $data = [
             'soalQuiz' => $request->quizTambah,
             'imageQuiz' => $request->imageQuizTambah,
-            'idMateri' => decrypt($request->idMateriTambahQuiz),
+            'idMateri' => base64_decode($request->idMateriTambahQuiz),
             'jawab' => $request->jawabTambah,
             'created_at' => date('Y-m-d H:i:s'),
         ];
@@ -380,7 +396,7 @@ class MateriController extends Controller
         $data = [
             'soalQuiz' => $request->quizEdit,
             'imageQuiz' => $request->imageQuizEdit,
-            'idQuiz' => decrypt($request->idQuizEdit),
+            'idQuiz' => base64_decode($request->idQuizEdit),
             'jawab' => $request->jawabEditQuiz,
         ];
 
@@ -413,7 +429,7 @@ class MateriController extends Controller
     public function deleteDataQuiz(Request $request)
     {
         $dataHapus = [
-            'idQuiz' => decrypt($request->idQuizHapus),
+            'idQuiz' => base64_decode($request->idQuizHapus),
             'soalQuiz' => $request->quizHapus,
             'imageQuiz' => $request->imageQuizHapus,
             'jawab' => $request->jawabHapusQuiz,

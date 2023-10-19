@@ -54,11 +54,11 @@
                                                 class="btn btn-warning">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
-                                            {{-- <a href="javascript:void(0)" data-id="{{ encrypt($row->kode_kelas) }}"
+                                            {{-- <a href="javascript:void(0)" data-id="{{ base64_encode($row->kode_kelas) }}"
                                                 id="btn-hapus-guru" class="btn btn-danger">
                                                 <i class="bi bi-trash-fill"></i>
                                             </a> --}}
-                                            <a href="{{ route('detailDataSiswa', ['kode_kelas' => encrypt($row->kode_kelas)]) }}"
+                                            <a href="{{ route('detailDataSiswa', ['kode_kelas' => base64_encode($row->kode_kelas)]) }}"
                                                 id="btn-detail-guru" class="btn btn-primary">
                                                 <i class="bi bi-info-square"></i>
                                             </a>

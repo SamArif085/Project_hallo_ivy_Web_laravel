@@ -50,7 +50,7 @@ Route::get('/detailGuru/{id_guru}', [AdminController::class, 'detailGuru'])->mid
 
 Route::get('dataSiswa', [AdminController::class, 'dataSiswa'])->name('dataSiswa')->middleware('auth');
 Route::post('/createKelas', [AdminController::class, 'createKelas'])->middleware('auth');
-// Route::post('/updateGuru', [AdminController::class, 'updateGuru'])->middleware('auth');
+Route::post('/updateKelas', [AdminController::class, 'updateKelas'])->middleware('auth');
 // Route::post('/deleteGuru', [AdminController::class, 'deleteGuru'])->middleware('auth');
 Route::get('/detailKelas/{kode_kelas}', [AdminController::class, 'showDataKelas'])->middleware('auth');
 
