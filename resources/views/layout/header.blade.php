@@ -5,14 +5,14 @@
         @if (Auth::user()->role === 1)
             <a href="{{ route('dashboardAdmin') }}" class="logo d-flex justify-content-center">
                 <img src="{{ asset('images/logo-web.jpg') }}" alt="logo-web" class="rounded float-start">
-                <span class="d-none d-lg-block" style="color: #66E682">HELLO-IVY</span>
+                <span class="d-none d-lg-block" style="color: #66E682">HALLO-IVY</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         @endif
         @if (Auth::user()->role === 2)
             <a href="{{ route('dashboard') }}" class="logo d-flex justify-content-center">
                 <img src="{{ asset('images/logo-web.jpg') }}" alt="logo-web" class="rounded float-start">
-                <span class="d-none d-lg-block" style="color: #66E682">HELLO-IVY</span>
+                <span class="d-none d-lg-block" style="color: #66E682">HALLO-IVY</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         @endif

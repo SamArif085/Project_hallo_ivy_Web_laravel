@@ -9,7 +9,7 @@
                         <div class="card mb-3" style="background-color: #66E782">
                             <div class="card-body">
                                 <div class="pt-2 pb-2 mb-2 pt-3">
-                                    <h1 class="text-center mt-3" style="font-size: 70px">HELLO-IVY</h1>
+                                    <h1 class="text-center mt-3" style="font-size: 70px">HALLO-IVY</h1>
                                     {{-- <p class="text-center small">Enter your username & password to login</p> --}}
                                 </div>
                                 @if (session()->has('error'))
@@ -49,6 +49,9 @@
                                         </div>
                                     </div>
                                 </form>
+                                <div>
+                                    <a href="#" class="btn btn-primary"><i class="bi bi-download"></i> Aplikasi</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -70,7 +73,6 @@
                     </div>
                 </div>
             </section>
-
         </div>
     </main><!-- End #main -->
 @endsection
