@@ -74,6 +74,7 @@
     <!-- Template Main JS File -->
     <script src="{{ asset('js/main.js') }}"></script>
 
+    <!-- Function JS Ajax -->
     <script src="{{ asset('js/function.js') }}"></script>
 
 </body>
