@@ -840,6 +840,8 @@ $("#simpanDataPR").click(function (e) {
     var judulPr = $("#judulPr").val();
     var deskripsi = $("#deskripsi").val();
     var status = $("#status").val();
+    var kodeKelas = $("#kodeKelas").val();
+    var tenggat = $("#tenggat").val();
 
     $.ajax({
         type: "POST",
@@ -890,6 +892,24 @@ $("#simpanDataPR").click(function (e) {
                     showConfirmButton: true,
                 });
             }
+            if (kodeKelas == "") {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Kelas Harap Dipilih !!!",
+                    showConfirmButton: true,
+                });
+            }
+            if (empty(tenggat)) {
+                Swal.fire({
+                    type: "error",
+                    icon: "error",
+                    title: `${xhr.status}`,
+                    text: "Kelas Harap Dipilih !!!",
+                    showConfirmButton: true,
+                });
+            }
         },
     });
 });
@@ -922,7 +942,9 @@ $("body").on("click", "#btn-edit-PR", function () {
             $("#deskripsiEdit").val(response.deskripsi);
             $("#statusEdit").val(response.status);
             $("#tenggatEdit").val(response.tenggat);
-            console.log(response);
+            $("#kode_kelas").val(response.kode_kel + ` - ` + response.ket_kelas);
+            $("#kodeKelasLama").val(response.kode_kel);
+            // console.log(response);
             $("#editPR").modal("show");
         },
     });
@@ -945,7 +967,7 @@ $("#editDataPR").click(function (e) {
             $("#loading-edit").show();
         }, //menampilkan loading saat mengirimkan data
         success: function (response) {
-            $("#editDataPR").hide();
+            $("#editPR").hide();
             Swal.fire({
                 type: "success",
                 icon: "success",
@@ -1025,7 +1047,7 @@ $("#hapusPRData").click(function (e) {
             $("#loading-hapus").show();
         }, //menampilkan loading saat mengirimkan data
         success: function (response) {
-            $("#hapusPRData").hide();
+            $("#hapusPR").hide();
             if (response.message) {
                 Swal.fire({
                     type: "success",

@@ -1,7 +1,7 @@
 <!-- Kumpulan Modal -->
 <!-- Modal Tambah Materi -->
 <div class="modal fade" id="addPR" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md modal-lg">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $modalTitle['materi'] }}</h1>
@@ -17,6 +17,24 @@
                         <input type="text" class="form-control mb-3" name="deskripsi" id="deskripsi" required>
                         <input type="text" class="form-control mb-3" hidden name="status" id="status"
                             value="aktif" required>
+                        {{-- <input type="text" class="form-control mb-3" required> --}}
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="exampleFormControlInput1" class="form-label">Tenggat</label>
+                                <input type="date" class="form-control mb-3" name="tenggat" id="tenggat" required>
+                            </div>
+                            <div class="col-6">
+                                <label for="exampleFormControlInput1" class="form-label">Kelas</label>
+                                <select class="form-select" aria-label="Default select example" name="kodeKelas"
+                                    id="kodeKelas">
+                                    <option value="null" selected>Pilihan</option>
+                                    @foreach ($kode_kelas as $kel => $kelas)
+                                        <option value="{{ $kelas->kode_kelas }}">
+                                            {{ $kelas->kode_kelas }} - {{ $kelas->ket_kelas }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
             </div>
             <div class="modal-footer">
@@ -53,6 +71,26 @@
                         <label for="exampleFormControlInput1" class="form-label">Tanggat</label>
                         <input type="date" class="form-control mb-3" name="tenggat" id="tenggatEdit" required>
                         <input type="text" class="form-control mb-3" hidden name="status" id="statusEdit">
+                        <div class="row">
+                            <div class="col-6">
+                                <label for="exampleFormControlInput1" class="form-label">Kelas Lama</label>
+                                <input type="text" readonly class="form-control mb-3" name="kode_kelas" id="kode_kelas"
+                                    required>
+                                <input type="hidden" readonly class="form-control mb-3" name="kodeKelasLama" id="kodeKelasLama"
+                                    required>
+                            </div>
+                            <div class="col-6">
+                                <label for="exampleFormControlInput1" class="form-label">Kelas Baru</label>
+                                <select class="form-select" aria-label="Default select example" name="kodeKelasBaru"
+                                    id="kodeKelasBaru">
+                                    <option value="null" selected>Pilihan</option>
+                                    @foreach ($kode_kelas as $kel => $kelas)
+                                        <option value="{{ $kelas->kode_kelas }}">
+                                            {{ $kelas->kode_kelas }} - {{ $kelas->ket_kelas }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
             </div>
             <div class="modal-footer">

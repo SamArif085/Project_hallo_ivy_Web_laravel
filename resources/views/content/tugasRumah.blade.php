@@ -29,12 +29,13 @@
                             <table class="table datatable">
                                 <thead>
                                     <tr>
-                                        <th scope="col">No</th>
-                                        <th scope="col">Judul Tugas Rumah</th>
-                                        <th scope="col">Penjelasan</th>
-                                        <th scope="col">Tanggat</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Aksi</th>
+                                        <th>No</th>
+                                        <th>Judul Tugas Rumah</th>
+                                        <th>Penjelasan</th>
+                                        <th>Kelas</th>
+                                        <th>Tanggat</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -46,6 +47,7 @@
                                         <td><?= $no++ ?></td>
                                         <td><?= $row->judulPr ?></td>
                                         <td><?= $row->deskripsi ?></td>
+                                        <td><?= $row->kode_kelas ?></td>
                                         <td><?= $row->tenggat ?></td>
                                         <td><?= $row->status ?></td>
                                         <td>
@@ -87,6 +89,7 @@
                                         <th scope="col">No</th>
                                         <th scope="col">Judul Tugas Rumah</th>
                                         <th scope="col">Penjelasan</th>
+                                        <th scope="col">Kelas</th>
                                         <th scope="col">Tanggat</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Aksi</th>
@@ -101,6 +104,7 @@
                                         <td><?= $no++ ?></td>
                                         <td><?= $row->judulPr ?></td>
                                         <td><?= $row->deskripsi ?></td>
+                                        <td><?= $row->kode_kelas ?></td>
                                         <td><?= $row->tenggat ?></td>
                                         <td><?= $row->status ?></td>
                                         <td>

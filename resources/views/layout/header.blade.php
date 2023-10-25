@@ -2,16 +2,16 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-        @if (Auth::user()->role === 1)
+        @if (Auth::user()->role == 1)
             <a href="{{ route('dashboardAdmin') }}" class="logo d-flex justify-content-center">
-                <img src="{{ asset('images/logo-web.jpg') }}" alt="logo-web" class="rounded float-start">
+                <img src="{{ asset('images/Icon REV APK.png') }}" alt="logo-web" class="rounded float-start">
                 <span class="d-none d-lg-block" style="color: #66E682">HALLO-IVY</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         @endif
-        @if (Auth::user()->role === 2)
+        @if (Auth::user()->role == 2)
             <a href="{{ route('dashboard') }}" class="logo d-flex justify-content-center">
-                <img src="{{ asset('images/logo-web.jpg') }}" alt="logo-web" class="rounded float-start">
+                <img src="{{ asset('images/Icon REV APK.png') }}" alt="logo-web" class="rounded float-start">
                 <span class="d-none d-lg-block" style="color: #66E682">HALLO-IVY</span>
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
